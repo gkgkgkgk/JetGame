@@ -54,9 +54,9 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 	if(forward){
 		p.xPos += 1 * Math.sin(Math.toRadians(p.rotation));
     	p.yPos += -1 * Math.cos(Math.toRadians(p.rotation)); 
-    	System.out.println(p.rotation+" degrees");
-		System.out.print("Sin "+Math.sin(Math.toRadians(p.rotation)));
-		System.out.print("Cos "+Math.cos(Math.toRadians(p.rotation)));		
+    	//System.out.println(p.rotation+" degrees");
+		//System.out.print("Sin "+Math.sin(Math.toRadians(p.rotation)));
+		//System.out.print("Cos "+Math.cos(Math.toRadians(p.rotation)));		
 	}
     time++;
     repaint();
@@ -65,15 +65,15 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 
  	public void keyPressed(KeyEvent e) { 
  		if(e.getKeyChar() == 'd'){
- 			System.out.println("d pressed");
+ 			//System.out.println("d pressed");
  			right = true;
  		}
  		if(e.getKeyChar() == 'a'){
- 			System.out.println("a pressed");
+ 			//System.out.println("a pressed");
  			left = true;
  		}
  		if(e.getKeyChar() == 'w'){
- 			System.out.println("w pressed");
+ 			//System.out.println("w pressed");
 			forward = true;
 		}
  		
@@ -81,15 +81,15 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
  	}
     public void keyReleased(KeyEvent e) { 
     	if(e.getKeyChar() == 'd'){
- 			System.out.println("d released");
+ 			//System.out.println("d released");
  			right = false;
  		}
  		if(e.getKeyChar() == 'a'){
- 			System.out.println("a released");
+ 			//System.out.println("a released");
  			left = false;
  		}
  		if(e.getKeyChar() == 'w'){
- 			System.out.println("w released");
+ 			//System.out.println("w released");
 			forward = false;
 		}
 
