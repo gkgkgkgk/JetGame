@@ -16,9 +16,12 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 	double velocity;
 	double velocityX;
 	double velocityY;
+ 	double accelerationY;
+ 	double accelerationX;
+ 	double forceY;
+ 	double forceX;
 
-	public double mass = 50.0;
-	public double thrust = 20000.0;
+	public double mass = 20.0;
 	int time = 0;
 	JFrame w;
 	public player p = new player();
@@ -54,10 +57,15 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 	//System.out.print("Sin "+Math.sin(p.rotation));
 	//System.out.print("Cos "+Math.cos(p.rotation));
   	//System.out.println("Runnning"); it works
-  	lastX = p.xPos;
-  	lastY = p.yPos;
-  	p.yPos +=  ((velocityY*0.01) + (0.0001* gravity * 0.5));
-  	p.xPos +=  ((velocityX*0.01));
+ 	findForceY();
+ 	findAccelerationY();
+   	findVelocityY();
+   	findForceX();
+ 	findAccelerationX();
+   	findVelocityX();
+  	//System.out.println("position:"+ p.yPos + "  velocity: "+ velocityY);
+  	p.yPos += velocityY * 0.01;
+  	p.xPos +=  velocityX*0.01;
 	if(right){
 		//System.out.println("right");
 		p.rotation += rotationSpeed;
@@ -67,24 +75,54 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 		p.rotation -= rotationSpeed;
 	}
 	if(forward){
-		p.addForce();
-    	//System.out.println(p.rotation+" degrees");
-		System.out.print("Sin "+Math.sin(Math.toRadians(p.rotation)));
-		//System.out.print("Cos "+Math.cos(Math.toRadians(p.rotation)));		
+		addForce();
 	}
 
 
-	findVelocity();
 	
-	System.out.println("Velocty: "+velocity);
+//	/System.out.println("Velocty: "+velocity);
     time++;
     repaint();
+      System.out.println(forceY+ "  " + velocityX);
+
   }
 
-  public void findVelocity(){
-  	velocity = (Math.sqrt((lastX-p.xPos)*(lastX-p.xPos) + (lastY-p.yPos)*(lastY-p.yPos)))/0.01;
-  	velocityX = (lastX-p.xPos)/0.01;
-  	velocityY = (lastY-p.yPos)/0.01;
+
+	public void addForce(){
+			System.out.println("adding Force");
+			forceX += 10.0 * Math.sin(Math.toRadians(p.rotation));
+    		forceY -= (mass*5.0) * Math.cos(Math.toRadians(p.rotation)); 
+	}
+
+
+
+	public void findVelocityY(){
+		velocityY += accelerationY * 0.01;	
+	}
+public void findVelocityX(){
+		velocityX += accelerationX * 0.01;	
+	}
+
+  public void findForceY(){
+  	  		forceY += gravity * mass;
+  		
+  	}
+   public void findForceX(){
+   	if(!forward && forceX > 0 && forceX != 0){
+  	forceX += mass*accelerationX;
+  	
+  	}  
+	if(!forward && forceX < 0 && forceX != 0){
+  	forceX -= mass*accelerationX; 	
+  	}  
+
+   	  }
+  
+  public void findAccelerationY(){
+  	accelerationY = (0.001*forceY)/mass;
+  }
+  public void findAccelerationX(){
+  	accelerationX = (0.001*forceX)/mass;
   }
 
 
@@ -142,10 +180,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
       		g2d.drawImage(img, 0, 0, 10, 20, j);
 			//g2d.draw(r);
 		}
-		public void addForce(){
-			p.xPos += 0.5*(velocity)*0.01 * Math.cos(Math.toRadians(p.rotation));
-    		p.yPos -= 0.5*(velocity)*0.01 * Math.cos(Math.toRadians(p.rotation)); 
-		}
+		
 	}
 
 
