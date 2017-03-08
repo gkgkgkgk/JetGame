@@ -13,15 +13,16 @@ import java.lang.Math;
 
 public class JetMovement extends JPanel implements KeyListener, ActionListener{
 	double gravity = 9.87;
-	double velocity;
+	double maxVelocity = 50.0;
 	double velocityX;
 	double velocityY;
  	double accelerationY;
  	double accelerationX;
  	double forceY;
  	double forceX;
-
-	public double mass = 20.0;
+ 	double inputForceY;
+ 	double inputForceX;
+	public double mass = 1.0;
 	int time = 0;
 	JFrame w;
 	public player p = new player();
@@ -30,7 +31,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 	public boolean right = false;
 	public boolean forward = false;
 	public boolean game = true;
-	public double rotationSpeed = 1;
+	public double rotationSpeed = 2;
 	public double lastX;
 	public double lastY;
 
@@ -57,10 +58,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 	//System.out.print("Sin "+Math.sin(p.rotation));
 	//System.out.print("Cos "+Math.cos(p.rotation));
   	//System.out.println("Runnning"); it works
- 	findForceY();
  	findAccelerationY();
    	findVelocityY();
-   	findForceX();
  	findAccelerationX();
    	findVelocityX();
   	//System.out.println("position:"+ p.yPos + "  velocity: "+ velocityY);
@@ -75,54 +74,61 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 		p.rotation -= rotationSpeed;
 	}
 	if(forward){
-		addForce();
+		forceX = 100*Math.sin(Math.toRadians(p.rotation));
+    	forceY = -100*Math.cos(Math.toRadians(p.rotation)); 
 	}
+	
 
 
 	
 //	/System.out.println("Velocty: "+velocity);
     time++;
     repaint();
-      System.out.println(forceY+ "  " + velocityX);
-
+      //System.out.println("(X,Y) | Acceleration "+accelerationX+", "+accelerationY+" | Velocity "+velocityX+", "+velocityY+" | Force "+forceX+", "+forceY);
+		System.out.println(velocityX);
   }
 
 
-	public void addForce(){
-			System.out.println("adding Force");
-			forceX += 10.0 * Math.sin(Math.toRadians(p.rotation));
-    		forceY -= (mass*5.0) * Math.cos(Math.toRadians(p.rotation)); 
-	}
-
-
+	
 
 	public void findVelocityY(){
-		velocityY += accelerationY * 0.01;	
+	if(forward){
+	if(Math.abs(velocityY) < maxVelocity){
+		velocityY += accelerationY * 0.01;
 	}
-public void findVelocityX(){
-		velocityX += accelerationX * 0.01;	
+	else if(velocityY > 0){
+		velocityY = maxVelocity-1;
+	}	
+	else if(velocityX < 0){
+		velocityY = (-maxVelocity)+1;
+	}	}
+else{
+	velocityY += accelerationY * 0.01;
+}
+}
+	public void findVelocityX(){
+	if(Math.abs(velocityX) < maxVelocity){
+		velocityX += accelerationX * 0.01;
+	}
+	else if(velocityX > 0){
+		velocityX = maxVelocity-1;
+	}	
+	else if(velocityX < 0){
+		velocityX = (-maxVelocity)+1;
+	}	
 	}
 
-  public void findForceY(){
-  	  		forceY += gravity * mass;
-  		
-  	}
-   public void findForceX(){
-   	if(!forward && forceX > 0 && forceX != 0){
-  	forceX += mass*accelerationX;
-  	
-  	}  
-	if(!forward && forceX < 0 && forceX != 0){
-  	forceX -= mass*accelerationX; 	
-  	}  
-
-   	  }
   
   public void findAccelerationY(){
-  	accelerationY = (0.001*forceY)/mass;
+  	if(!forward){
+  		accelerationY = 9.8;
+  }
+  else{
+  	  	accelerationY = (forceY/mass);
+  }
   }
   public void findAccelerationX(){
-  	accelerationX = (0.001*forceX)/mass;
+  	accelerationX = forceX/mass;
   }
 
 
