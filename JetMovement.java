@@ -58,8 +58,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         for(bullet b : bullets){
-        b.xPos += 10*b.xRot;
-        b.yPos += 10* b.yRot;
+        b.xPos += b.speed*b.xRot;
+        b.yPos += b.speed* b.yRot;
         }
         //System.out.println(p.rotation+" degrees");
         //System.out.print("Sin "+Math.sin(p.rotation));
@@ -135,7 +135,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void shoot(){
-        bullet b = new bullet();
+        bullet b = new bullet(10);
         bullets.add(b);
     }
 
@@ -154,7 +154,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             forward = true;
         }
         if(e.getKeyChar() == 's'){
-            System.out.println("Shoot");
+            //System.out.println("Shoot");
             shoot();
         }
 
@@ -199,9 +199,11 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         double rotation;
         double yRot;
         double xRot;
+        double speed;
         Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
 
-        public bullet(){
+        public bullet(double speed){
+            this.speed = speed;
             xPos = p.xPos;
             yPos = p.yPos;
             yRot = -Math.cos(Math.toRadians(p.rotation));
