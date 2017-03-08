@@ -84,7 +84,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener{
 //	/System.out.println("Velocty: "+velocity);
     time++;
     repaint();
-      //System.out.println("(X,Y) | Acceleration "+accelerationX+", "+accelerationY+" | Velocity "+velocityX+", "+velocityY+" | Force "+forceX+", "+forceY);
+      System.out.println("(X,Y) | Acceleration "+accelerationX+", "+accelerationY+" | Velocity "+velocityX+", "+velocityY+" | Force "+forceX+", "+forceY);
 		System.out.println(velocityX);
   }
 
