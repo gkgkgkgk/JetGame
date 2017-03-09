@@ -57,12 +57,14 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
+        //Normalize the rotations (map to 360)
     	if(p.rotation > 360){
     		p.rotation -= 360;
     	}
     	else if(p.rotation < -360){
     		p.rotation += 360;
     	}
+        //image stuff
     	if((Math.abs(p.rotation) < 45) || (Math.abs(p.rotation) > 135 && Math.abs(p.rotation) < 225)){
     		p.img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
     	}
@@ -72,7 +74,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     	else{
     		p.img = new ImageIcon(this.getClass().getResource("planeLeft.png")).getImage();
     	}
-        System.out.println(p.rotation);	
+        //System.out.println(p.rotation);	
         for(bullet b : bullets){
         b.xPos += b.speed*b.xRot;
         b.yPos += b.speed* b.yRot;
