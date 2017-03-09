@@ -19,7 +19,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     JFrame w;
 
     double gravity = 9.87;
-    double maxVelocity = 50.0;
+    double maxVelocity = 100.0;
     double velocityX;
     double velocityY;
     double accelerationY;
@@ -46,7 +46,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         t.start();
         p.xPos = 400;
         p.yPos = 300;
-        setBackground(Color.RED);
+        setBackground(new Color(135,206,235));
         w = new JFrame();
         w.setSize(800, 600);
         w.setContentPane(this);
@@ -57,6 +57,22 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
+    	if(p.rotation > 360){
+    		p.rotation -= 360;
+    	}
+    	else if(p.rotation < -360){
+    		p.rotation += 360;
+    	}
+    	if((Math.abs(p.rotation) < 45) || (Math.abs(p.rotation) > 135 && Math.abs(p.rotation) < 225)){
+    		p.img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
+    	}
+    	else if (p.rotation <= 135 && p.rotation >= 45){
+    		p.img = new ImageIcon(this.getClass().getResource("planeRight.png")).getImage();
+    	}
+    	else{
+    		p.img = new ImageIcon(this.getClass().getResource("planeLeft.png")).getImage();
+    	}
+        System.out.println(p.rotation);	
         for(bullet b : bullets){
         b.xPos += b.speed*b.xRot;
         b.yPos += b.speed* b.yRot;
@@ -126,16 +142,16 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         if (!forward) {
             accelerationY = 9.8;
         } else {
-            accelerationY = (forceY / mass);
+            accelerationY = 9.8+(forceY / mass);
         }
     }
     public void findAccelerationX() {
-        accelerationX = forceX / mass;
+        accelerationX = (forceX / mass);
     }
 
 
     public void shoot(){
-        bullet b = new bullet(10);
+        bullet b = new bullet(25);
         bullets.add(b);
     }
 
@@ -183,9 +199,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         double xPos;
         double yPos;
         double rotation;
-        Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
-
-
+        Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
         public player() {
 
 
@@ -219,8 +233,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         Graphics2D g2d = (Graphics2D) g; // Create a Java2D version of g.
         AffineTransform old = g2d.getTransform();
         g2d.translate(p.xPos, p.yPos); // Translate the center of our coordinates.
-        g2d.rotate(Math.toRadians(p.rotation), 5, 10); // Rotate the image..rotate(Math.toRadians(angle), m_imageWidth/2, m_imageHeight/2);
-        g2d.drawImage(p.img, 0, 0, 10, 20, j);
+        g2d.rotate(Math.toRadians(p.rotation), 15, 15); // Rotate the image..rotate(Math.toRadians(angle), m_imageWidth/2, m_imageHeight/2);
+        g2d.drawImage(p.img, 0, 0, 30, 30, j);
         
         g2d.setTransform(old);
         for(bullet b : bullets){
