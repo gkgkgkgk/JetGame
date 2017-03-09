@@ -18,7 +18,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     int time = 0;
     JFrame w;
 
-    double gravity = 9.87;
+    double gravity = 0;
     double maxVelocity = 100.0;
     double velocityX;
     double velocityY;
@@ -39,7 +39,12 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     double lastX;
     double lastY;
     ArrayList<bullet> bullets = new ArrayList<bullet>();
-
+	ArrayList<particleTrail> trail = new ArrayList<particleTrail>();
+	int particleCounter = 0;
+	public enum state {
+    UP, DOWN, RIGHT, LEFT
+	};
+	public state s;
 
     public JetMovement() {
         Timer t = new Timer(10, this);
@@ -57,6 +62,20 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
+    	//System.out.println((15*(Math.sin(Math.toRadians(p.rotation)))));  
+    	//manage Particles
+    	if(particleCounter <= 100){
+    	particleCounter += 1;
+    	trail.add(new particleTrail());
+    	}
+    	else{
+    	trail.remove(0);
+    	particleCounter -= 1;
+    	}
+    	
+    	
+    	
+    	
         //Normalize the rotations (map to 360)
     	if(p.rotation > 360){
     		p.rotation -= 360;
@@ -65,16 +84,19 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     		p.rotation += 360;
     	}
         //image stuff
-    	if((Math.abs(p.rotation) < 45) || (Math.abs(p.rotation) > 135 && Math.abs(p.rotation) < 225)){
+    	if((Math.abs(p.rotation) > 315) || (Math.abs(p.rotation) < 45) || (Math.abs(p.rotation) > 135 && Math.abs(p.rotation) < 225)){
     		p.img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
+    		s = state.UP;
     	}
-    	else if (p.rotation <= 135 && p.rotation >= 45){
+    	else if ((p.rotation <= 135 && p.rotation >= 45) || (p.rotation >= -315 && p.rotation <= -225)){
     		p.img = new ImageIcon(this.getClass().getResource("planeRight.png")).getImage();
+    		s = state.RIGHT;
     	}
     	else{
     		p.img = new ImageIcon(this.getClass().getResource("planeLeft.png")).getImage();
+    		s = state.LEFT;
     	}
-        //System.out.println(p.rotation);	
+        System.out.println(p.rotation);	
         for(bullet b : bullets){
         b.xPos += b.speed*b.xRot;
         b.yPos += b.speed* b.yRot;
@@ -142,9 +164,9 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
     public void findAccelerationY() {
         if (!forward) {
-            accelerationY = 9.8;
+            accelerationY = gravity;
         } else {
-            accelerationY = 9.8+(forceY / mass);
+            accelerationY = gravity+(forceY / mass);
         }
     }
     public void findAccelerationX() {
@@ -155,6 +177,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     public void shoot(){
         bullet b = new bullet(25);
         bullets.add(b);
+        
     }
 
 
@@ -216,7 +239,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         double yRot;
         double xRot;
         double speed;
-        Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+        Image img = new ImageIcon(this.getClass().getResource("bullet.png")).getImage();
 
         public bullet(double speed){
             this.speed = speed;
@@ -230,17 +253,43 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     }
 
 
+
+	public class particleTrail{
+		Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+		double xPos;
+        double yPos;
+
+		public particleTrail(){
+			xPos = 15 + p.xPos - (15*(Math.sin(Math.toRadians(p.rotation))));
+			yPos = 15 + p.yPos - (15*(-Math.cos(Math.toRadians(p.rotation))));
+		}
+	
+	
+	}
+
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g; // Create a Java2D version of g.
         AffineTransform old = g2d.getTransform();
         g2d.translate(p.xPos, p.yPos); // Translate the center of our coordinates.
-        g2d.rotate(Math.toRadians(p.rotation), 15, 15); // Rotate the image..rotate(Math.toRadians(angle), m_imageWidth/2, m_imageHeight/2);
-        g2d.drawImage(p.img, 0, 0, 30, 30, j);
-        
+        g2d.rotate(Math.toRadians(p.rotation), 15, 15); 
+        g2d.drawImage(p.img, 0, 0, 30, 30, j);     
+
         g2d.setTransform(old);
         for(bullet b : bullets){
         g2d.drawImage(b.img, (int)b.xPos, (int)b.yPos, 10, 10, j);
+        }
+        float pCounter = trail.size();
+        //change transparency
+		Composite c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+       .1f);
+        for(particleTrail p : trail){
+        c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+       (float)(1f/pCounter));
+   		g2d.setComposite(c);        
+        pCounter -= 1;
+        g2d.drawImage(p.img, (int)p.xPos, (int)p.yPos, 5, 5, j);
         }
     }
 
