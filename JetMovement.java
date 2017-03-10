@@ -49,12 +49,12 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     public JetMovement() {
         Timer t = new Timer(10, this);
         t.start();
-        p.xPos = 400;
-        p.yPos = 300;
+        p.xPos = 600;
+        p.yPos = 450;
         //setBackground(new Color(135,206,235));
         setBackground(Color.GRAY);
         w = new JFrame();
-        w.setSize(800, 600);
+        w.setSize(1280, 720);
         w.setContentPane(this);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         w.setVisible(true);
