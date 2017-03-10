@@ -18,7 +18,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     int time = 0;
     JFrame w;
 
-    double gravity = 0;
+    double gravity = 9.87;
     double maxVelocity = 100.0;
     double velocityX;
     double velocityY;
@@ -51,7 +51,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         t.start();
         p.xPos = 400;
         p.yPos = 300;
-        setBackground(new Color(135,206,235));
+        //setBackground(new Color(135,206,235));
+        setBackground(Color.GRAY);
         w = new JFrame();
         w.setSize(800, 600);
         w.setContentPane(this);
@@ -72,9 +73,18 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     	trail.remove(0);
     	particleCounter -= 1;
     	}
-    	
-    	
-    	
+
+    	for(bullet b : bullets){
+        if(b.particleCounter <= 10){
+    	b.particleCounter += 1;
+    	b.trail.add(new particleTrail(b));
+    	}
+    	else{
+    	b.trail.remove(0);
+    	b.particleCounter -= 1;
+    	}
+    }
+
     	
         //Normalize the rotations (map to 360)
     	if(p.rotation > 360){
@@ -96,7 +106,6 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     		p.img = new ImageIcon(this.getClass().getResource("planeLeft.png")).getImage();
     		s = state.LEFT;
     	}
-        System.out.println(p.rotation);	
         for(bullet b : bullets){
         b.xPos += b.speed*b.xRot;
         b.yPos += b.speed* b.yRot;
@@ -110,8 +119,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         findAccelerationX();
         findVelocityX();
         //System.out.println("position:"+ p.yPos + "  velocity: "+ velocityY);
-        p.yPos += velocityY * 0.01;
-        p.xPos += velocityX * 0.01;
+        p.yPos += velocityY * 0.02; //realistacally should be 0.01 not 0.02, 
+        p.xPos += velocityX * 0.02; //but 0.02 makes the game quicker and the plane more manueverable
         if (right) {
             //System.out.println("right");
             p.rotation += rotationSpeed;
@@ -124,6 +133,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             forceX = 100 * Math.sin(Math.toRadians(p.rotation));
             forceY = -100 * Math.cos(Math.toRadians(p.rotation));
         }
+
 
 
 
@@ -175,7 +185,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void shoot(){
-        bullet b = new bullet(25);
+        bullet b = new bullet(10);
         bullets.add(b);
         
     }
@@ -240,11 +250,16 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         double xRot;
         double speed;
         Image img = new ImageIcon(this.getClass().getResource("bullet.png")).getImage();
+        Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
 
+        ArrayList<particleTrail> trail = new ArrayList<particleTrail>();
+
+        int particleCounter = 0;
         public bullet(double speed){
             this.speed = speed;
-            xPos = p.xPos;
-            yPos = p.yPos;
+            xPos = 10 + p.xPos + (15*(Math.sin(Math.toRadians(p.rotation))));
+			yPos = 10 + p.yPos + (15*(-Math.cos(Math.toRadians(p.rotation))));
+		
             yRot = -Math.cos(Math.toRadians(p.rotation));
             xRot = Math.sin(Math.toRadians(p.rotation));
         }
@@ -260,11 +275,13 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         double yPos;
 
 		public particleTrail(){
-			xPos = 15 + p.xPos - (15*(Math.sin(Math.toRadians(p.rotation))));
-			yPos = 15 + p.yPos - (15*(-Math.cos(Math.toRadians(p.rotation))));
+			xPos = 10 + p.xPos - (15*(Math.sin(Math.toRadians(p.rotation))));
+			yPos = 10 + p.yPos - (15*(-Math.cos(Math.toRadians(p.rotation))));
 		}
-	
-	
+		public particleTrail(bullet b){
+			xPos = 2.5 + b.xPos - (2.5*(Math.sin(Math.toRadians(p.rotation))));
+			yPos = 2.5 + b.yPos - (2.5*(-Math.cos(Math.toRadians(p.rotation))));
+		}		
 	}
 
 
@@ -272,16 +289,9 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g; // Create a Java2D version of g.
         AffineTransform old = g2d.getTransform();
-        g2d.translate(p.xPos, p.yPos); // Translate the center of our coordinates.
-        g2d.rotate(Math.toRadians(p.rotation), 15, 15); 
-        g2d.drawImage(p.img, 0, 0, 30, 30, j);     
-
-        g2d.setTransform(old);
-        for(bullet b : bullets){
-        g2d.drawImage(b.img, (int)b.xPos, (int)b.yPos, 10, 10, j);
-        }
         float pCounter = trail.size();
         //change transparency
+        //draw trail
 		Composite c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
        .1f);
         for(particleTrail p : trail){
@@ -291,6 +301,25 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         pCounter -= 1;
         g2d.drawImage(p.img, (int)p.xPos, (int)p.yPos, 5, 5, j);
         }
+        //draw player
+        g2d.translate(p.xPos, p.yPos); // Translate the center of our coordinates.
+        g2d.rotate(Math.toRadians(p.rotation), 15, 15); 
+        g2d.drawImage(p.img, 0, 0, 30, 30, j);     
+        //draw bullets
+        g2d.setTransform(old);
+        for(bullet b : bullets){
+        	g2d.setTransform(old);
+        pCounter = b.trail.size();
+ 		for(particleTrail part : b.trail){
+ 		c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+       (float)(1f/pCounter));
+ 		g2d.setComposite(c);        
+        pCounter -= 1;
+        g2d.drawImage(b.particleImg, (int)part.xPos, (int)part.yPos, 5, 5, j);
+        }
+        g2d.drawImage(b.img, (int)b.xPos, (int)b.yPos, 5, 5, j);
+        }
+        
     }
 
     public static void main(String[] args) {
