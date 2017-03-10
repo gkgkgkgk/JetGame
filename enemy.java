@@ -18,11 +18,11 @@ import java.awt.geom.AffineTransform;
 public class enemy {
 	//variables to control AI
 	double mass = 1.0;
-	double xPos;
-	double yPos;
+	double xPos = 300;
+	double yPos = 100;
 	int width = 30;
 	int height = 30;
-	double maxVelocity = 100.0;
+	double maxVelocity = 50.0;
     double velocityX;
     double velocityY;
     double accelerationY;
@@ -33,12 +33,64 @@ public class enemy {
 	double rotationSpeed;
 	double targetPosX;
 	double targetPosY;
-	
+	double gravity = 9.87;
 	
 	Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();	
 	public enemy (){ //hehe
+	
 	}
 	
+	public void move(){	
+        findVelocityY();
+        findAccelerationX();
+        findVelocityX();
+        findAccelerationY();
+        yPos += velocityY * 0.02; 
+        xPos += velocityX * 0.02;
+        if(targetPosX >= xPos){
+		rotation = 90 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));
+		}
+		else{
+			//adding 270 for some rotation reason....  i think
+			rotation = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
+		}
+		System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
+		forceX = 100 * Math.sin(Math.toRadians(rotation));
+        forceY = -100 * Math.cos(Math.toRadians(rotation));
+	}
 	
-	
+ public void findVelocityY() {
+       
+            if (Math.abs(velocityY) < maxVelocity) {
+                velocityY += accelerationY * 0.01;
+            } else if (velocityY > 0) {
+                velocityY = maxVelocity - 1;
+            } else if (velocityX < 0) {
+                velocityY = (-maxVelocity) + 1;
+            }
+        
+    }
+    public void findVelocityX() {
+        if (Math.abs(velocityX) < maxVelocity) {
+            velocityX += accelerationX * 0.01;
+        } else if (velocityX > 0) {
+            velocityX = maxVelocity - 1;
+        } else if (velocityX < 0) {
+            velocityX = (-maxVelocity) + 1;
+        }
+    }
+
+
+    public void findAccelerationY() {
+       
+            accelerationY = gravity + (forceY / mass);
+        
+    }
+    public void findAccelerationX() {
+        accelerationX = (forceX / mass);
+    }
+
+
+
+
 	}

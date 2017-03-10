@@ -89,11 +89,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             }
         }
         
-        for(enemy en : enemies){
-        	en.targetPosX = p.xPos;
-        	en.targetPosY = p.yPos;
-        
-        }
+       
 
 
         //Normalize the rotations (map to 0-360)
@@ -139,6 +135,11 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         if (forward) {
             forceX = 100 * Math.sin(Math.toRadians(p.rotation));
             forceY = -100 * Math.cos(Math.toRadians(p.rotation));
+        }
+         for(enemy en : enemies){
+        	en.targetPosX = p.xPos;
+        	en.targetPosY = p.yPos;
+        	en.move();
         }
         //	/System.out.println("Velocty: "+velocity);
         time++;
@@ -331,8 +332,12 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 		//draw enemies
 		for(enemy e : enemies){
-			g2d.drawImage(e.img, (int) e.xPos, (int) e.yPos, e.width, e.height, j);	
+			//System.out.println("enemies are being drawn");
+			g2d.translate(e.xPos, e.yPos); // Translate the center of our coordinates.
+        	g2d.rotate(Math.toRadians(e.rotation), 15, 15);
+			g2d.drawImage(e.img, 0, 0, e.width, e.height, j);	
 		}
+			g2d.setTransform(old);
 
 
     }
