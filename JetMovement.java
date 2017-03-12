@@ -88,8 +88,29 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 b.particleCounter -= 1;
             }
         }
-        
+        //particle trails and bullets for enemies
+       for(enemy en : enemies){
+       	if (en.particleCounter <= 100) {
+            en.particleCounter += 1;
+            en.trail.add(new particleTrail(en));
+        } else {
+            en.trail.remove(0);
+            en.particleCounter -= 1;
+        }
+        //bullet particles/trails
+        for (bullet b: en.bullets) {
+            if (b.particleCounter <= 10) {
+                b.particleCounter += 1;
+                b.trail.add(new particleTrail(b));
+            } else {
+                b.trail.remove(0);
+                b.particleCounter -= 1;
+            }
+             b.xPos += b.speed * b.xRot;
+        	b.yPos += b.speed * b.yRot;
+        }
        
+       }
 
 
         //Normalize the rotations (map to 0-360)
@@ -281,14 +302,27 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 			//System.out.println("enemies are being drawn");
 			g2d.translate(e.xPos, e.yPos); // Translate the center of our coordinates.
         	g2d.rotate(Math.toRadians(e.rotation), 15, 15);
-        	/*pCounter = e.trail.size();
+			g2d.drawImage(e.img, 0, 0, e.width, e.height, j);
+			        	pCounter = e.trail.size();
+
+			g2d.setTransform(old);
         	for (particleTrail part: e.trail) {
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 g2d.setComposite(c);
                 pCounter -= 1;
                 g2d.drawImage(e.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
-            }*/
-			g2d.drawImage(e.img, 0, 0, e.width, e.height, j);	
+            }
+            for (bullet b: e.bullets) {
+            pCounter = b.trail.size();
+            for (particleTrail part: b.trail) {
+                c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
+                g2d.setComposite(c);
+                pCounter -= 1;
+
+                g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+            }
+            g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
+        }	
 		}
 			g2d.setTransform(old);
 

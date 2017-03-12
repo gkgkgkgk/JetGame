@@ -35,9 +35,10 @@ public class enemy {
 	double targetPosX;
 	double targetPosY;
 	double gravity = 9.87;
-	
+	ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
 	Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();	
 	Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+	ArrayList < bullet > bullets = new ArrayList < bullet > ();
 
     //ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
 
@@ -64,7 +65,8 @@ public class enemy {
 	
 
 	public void shoot(){
-
+		bullet b = new bullet(this, 20);
+        bullets.add(b);
 	}
 
 
