@@ -19,7 +19,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     JFrame w;
 
     double gravity = 9.87;
-    double maxVelocity = 100.0;
+    double maxVelocity = 150.0;
     double velocityX;
     double velocityY;
     double accelerationY;
@@ -89,28 +89,32 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             }
         }
         //particle trails and bullets for enemies
-       for(enemy en : enemies){
-       	if (en.particleCounter <= 100) {
-            en.particleCounter += 1;
-            en.trail.add(new particleTrail(en));
-        } else {
-            en.trail.remove(0);
-            en.particleCounter -= 1;
-        }
-        //bullet particles/trails
-        for (bullet b: en.bullets) {
-            if (b.particleCounter <= 10) {
-                b.particleCounter += 1;
-                b.trail.add(new particleTrail(b));
+        for (enemy en: enemies) {
+            en.targetPosX = p.xPos;
+            en.targetPosY = p.yPos;
+            en.move();
+            en.shotCoolDown -= 1;
+            if (en.particleCounter <= 100) {
+                en.particleCounter += 1;
+                en.trail.add(new particleTrail(en));
             } else {
-                b.trail.remove(0);
-                b.particleCounter -= 1;
+                en.trail.remove(0);
+                en.particleCounter -= 1;
             }
-             b.xPos += b.speed * b.xRot;
-        	b.yPos += b.speed * b.yRot;
+            //bullet particles/trails
+            for (bullet b: en.bullets) {
+                if (b.particleCounter <= 10) {
+                    b.particleCounter += 1;
+                    b.trail.add(new particleTrail(b));
+                } else {
+                    b.trail.remove(0);
+                    b.particleCounter -= 1;
+                }
+                b.xPos += b.speed * b.xRot;
+                b.yPos += b.speed * b.yRot;
+            }
+
         }
-       
-       }
 
 
         //Normalize the rotations (map to 0-360)
@@ -154,14 +158,10 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             p.rotation -= rotationSpeed;
         }
         if (forward) {
-            forceX = 100 * Math.sin(Math.toRadians(p.rotation));
-            forceY = -100 * Math.cos(Math.toRadians(p.rotation));
+            forceX = 500 * Math.sin(Math.toRadians(p.rotation)); // the number 500 is the thrust
+            forceY = -500 * Math.cos(Math.toRadians(p.rotation));
         }
-         for(enemy en : enemies){
-        	en.targetPosX = p.xPos;
-        	en.targetPosY = p.yPos;
-        	en.move();
-        }
+
         //	/System.out.println("Velocty: "+velocity);
         time++;
         repaint();
@@ -254,12 +254,6 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
 
-    
-
-    
-
-
-
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -297,34 +291,34 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
         }
 
-		//draw enemies
-		for(enemy e : enemies){
-			//System.out.println("enemies are being drawn");
-			g2d.translate(e.xPos, e.yPos); // Translate the center of our coordinates.
-        	g2d.rotate(Math.toRadians(e.rotation), 15, 15);
-			g2d.drawImage(e.img, 0, 0, e.width, e.height, j);
-			        	pCounter = e.trail.size();
+        //draw enemies
+        for (enemy e: enemies) {
+            //System.out.println("enemies are being drawn");
+            g2d.translate(e.xPos, e.yPos); // Translate the center of our coordinates.
+            g2d.rotate(Math.toRadians(e.rotation), 15, 15);
+            g2d.drawImage(e.img, 0, 0, e.width, e.height, j);
+            pCounter = e.trail.size();
 
-			g2d.setTransform(old);
-        	for (particleTrail part: e.trail) {
+            g2d.setTransform(old);
+            for (particleTrail part: e.trail) {
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 g2d.setComposite(c);
                 pCounter -= 1;
                 g2d.drawImage(e.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
             }
             for (bullet b: e.bullets) {
-            pCounter = b.trail.size();
-            for (particleTrail part: b.trail) {
-                c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
-                g2d.setComposite(c);
-                pCounter -= 1;
+                pCounter = b.trail.size();
+                for (particleTrail part: b.trail) {
+                    c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
+                    g2d.setComposite(c);
+                    pCounter -= 1;
 
-                g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+                    g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+                }
+                g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
             }
-            g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
-        }	
-		}
-			g2d.setTransform(old);
+        }
+        g2d.setTransform(old);
 
 
     }

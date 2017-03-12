@@ -22,7 +22,7 @@ public class enemy {
 	double yPos = 100;
 	int width = 30;
 	int height = 30;
-	double maxVelocity = 50.0;
+	double maxVelocity = 100.0;
     double velocityX;
     double velocityY;
     double accelerationY;
@@ -39,15 +39,15 @@ public class enemy {
 	Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();	
 	Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
 	ArrayList < bullet > bullets = new ArrayList < bullet > ();
-
-    //ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
-
+	int shotCoolDown = 100; // 1 bullet per second
     int particleCounter = 0;
+	
 	public enemy (){ //hehe
 	
 	}
 	
 	public void move(){	
+		System.out.println(shotCoolDown);
         findVelocityY();
         findAccelerationX();
         findVelocityX();
@@ -55,10 +55,10 @@ public class enemy {
         yPos += velocityY * 0.02; 
         xPos += velocityX * 0.02;
         lerpRotation(); //smoother, more inaccurate rotation
-		System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
-		forceX = 100 * Math.sin(Math.toRadians(rotation));
-        forceY = -100 * Math.cos(Math.toRadians(rotation));
-        if(Math.abs(desiredRot - rotation) < 5){ // if target is within 5 degress, change to velocity later
+		//System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
+		forceX = 500 * Math.sin(Math.toRadians(rotation));
+        forceY = -500 * Math.cos(Math.toRadians(rotation));
+        if(Math.abs(desiredRot - rotation) < 5 && shotCoolDown <= 0){ // if target is within 5 degress, change to velocity later
         	shoot();
 		}
 	}
@@ -67,6 +67,7 @@ public class enemy {
 	public void shoot(){
 		bullet b = new bullet(this, 20);
         bullets.add(b);
+        shotCoolDown = 100;
 	}
 
 
@@ -79,10 +80,10 @@ public class enemy {
 			desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
 		}
 		if(rotation < desiredRot){
-			rotation += 1;
+			rotation += 2;
 		}
 		else if(rotation > desiredRot){
-			rotation -= 1;
+			rotation -= 2;
 		}
 	}
 
