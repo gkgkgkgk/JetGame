@@ -30,12 +30,18 @@ public class enemy {
     double forceY;
     double forceX;
 	double rotation;
+	double desiredRot;
 	double rotationSpeed;
 	double targetPosX;
 	double targetPosY;
 	double gravity = 9.87;
 	
 	Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();	
+	Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+
+    //ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
+
+    int particleCounter = 0;
 	public enemy (){ //hehe
 	
 	}
@@ -47,18 +53,37 @@ public class enemy {
         findAccelerationY();
         yPos += velocityY * 0.02; 
         xPos += velocityX * 0.02;
-        if(targetPosX >= xPos){
-		rotation = 90 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));
-		}
-		else{
-			//adding 270 for some rotation reason....  i think
-			rotation = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
-		}
+        lerpRotation(); //smoother, more inaccurate rotation
 		System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
 		forceX = 100 * Math.sin(Math.toRadians(rotation));
         forceY = -100 * Math.cos(Math.toRadians(rotation));
+        if(Math.abs(desiredRot - rotation) < 5){ // if target is within 5 degress, change to velocity later
+        	shoot();
+		}
 	}
 	
+
+	public void shoot(){
+
+	}
+
+
+	public void lerpRotation(){
+		if(targetPosX >= xPos){
+		desiredRot = 90 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));
+		}
+		else{
+			//adding 270 for some rotation reason....  i think
+			desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
+		}
+		if(rotation < desiredRot){
+			rotation += 1;
+		}
+		else if(rotation > desiredRot){
+			rotation -= 1;
+		}
+	}
+
  public void findVelocityY() {
        
             if (Math.abs(velocityY) < maxVelocity) {
@@ -90,7 +115,6 @@ public class enemy {
         accelerationX = (forceX / mass);
     }
 
-
-
+  
 
 	}

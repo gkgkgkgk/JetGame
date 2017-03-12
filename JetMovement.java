@@ -73,7 +73,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         //manage Particles
         if (particleCounter <= 100) {
             particleCounter += 1;
-            trail.add(new particleTrail());
+            trail.add(new particleTrail(p));
         } else {
             trail.remove(0);
             particleCounter -= 1;
@@ -189,7 +189,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void shoot() {
-        bullet b = new bullet(20);
+        bullet b = new bullet(p, 20);
         bullets.add(b);
     }
 
@@ -233,63 +233,9 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
 
-    class player {
-        double xPos;
-        double yPos;
-        double width = 30.0;
-        double height = 30.0;
-        double rotation;
-        Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
-        public player() {
+    
 
-
-        }
-
-    }
-
-    class bullet {
-        double xPos;
-        double yPos;
-        double rotation;
-        double yRot;
-        double xRot;
-        double speed;
-        Image img = new ImageIcon(this.getClass().getResource("bullet.png")).getImage();
-        Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
-
-        ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
-
-        int particleCounter = 0;
-        public bullet(double speed) {
-            this.speed = speed;
-            xPos = 10 + p.xPos + (15 * (Math.sin(Math.toRadians(p.rotation))));
-            yPos = 10 + p.yPos + (15 * (-Math.cos(Math.toRadians(p.rotation))));
-
-            yRot = -Math.cos(Math.toRadians(p.rotation));
-            xRot = Math.sin(Math.toRadians(p.rotation));
-        }
-
-
-    }
-
-
-
-    class particleTrail {
-        Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
-        double xPos;
-        double yPos;
-
-        public particleTrail() {
-                //particle trail for plane/player
-                xPos = 10 + p.xPos - (15 * (Math.sin(Math.toRadians(p.rotation))));
-                yPos = 10 + p.yPos - (15 * (-Math.cos(Math.toRadians(p.rotation))));
-            }
-            //particle trail for bullet
-        public particleTrail(bullet b) {
-            xPos = 2.5 + b.xPos - (2.5 * (Math.sin(Math.toRadians(p.rotation))));
-            yPos = 2.5 + b.yPos - (2.5 * (-Math.cos(Math.toRadians(p.rotation))));
-        }
-    }
+    
 
 
 
@@ -335,6 +281,13 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 			//System.out.println("enemies are being drawn");
 			g2d.translate(e.xPos, e.yPos); // Translate the center of our coordinates.
         	g2d.rotate(Math.toRadians(e.rotation), 15, 15);
+        	/*pCounter = e.trail.size();
+        	for (particleTrail part: e.trail) {
+                c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
+                g2d.setComposite(c);
+                pCounter -= 1;
+                g2d.drawImage(e.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+            }*/
 			g2d.drawImage(e.img, 0, 0, e.width, e.height, j);	
 		}
 			g2d.setTransform(old);
