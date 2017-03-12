@@ -56,8 +56,8 @@ public class enemy {
         xPos += velocityX * 0.02;
         lerpRotation(); //smoother, more inaccurate rotation
 		//System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
-		forceX = 500 * Math.sin(Math.toRadians(rotation));
-        forceY = -500 * Math.cos(Math.toRadians(rotation));
+		forceX = 350 * Math.sin(Math.toRadians(rotation));
+        forceY = -350 * Math.cos(Math.toRadians(rotation));
         if(Math.abs(desiredRot - rotation) < 5 && shotCoolDown <= 0){ // if target is within 5 degress, change to velocity later
         	shoot();
 		}

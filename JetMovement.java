@@ -19,7 +19,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     JFrame w;
 
     double gravity = 9.87;
-    double maxVelocity = 150.0;
+    double maxVelocity = 100.0;
     double velocityX;
     double velocityY;
     double accelerationY;
@@ -158,8 +158,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             p.rotation -= rotationSpeed;
         }
         if (forward) {
-            forceX = 500 * Math.sin(Math.toRadians(p.rotation)); // the number 500 is the thrust
-            forceY = -500 * Math.cos(Math.toRadians(p.rotation));
+            forceX = 350 * Math.sin(Math.toRadians(p.rotation)); // the number 500 is the thrust
+            forceY = -350 * Math.cos(Math.toRadians(p.rotation));
         }
 
         //	/System.out.println("Velocty: "+velocity);
