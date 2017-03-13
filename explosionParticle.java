@@ -20,9 +20,10 @@ public class explosionParticle{
 	double posX;
 	double posY;
 	double rotation;
-	double lifeTime;
-
+	double lifeTime = 1.0;
+	double speed;
 	public explosionParticle(double rotation, double posX, double posY){
+		speed = Math.random()*10;
 		this.posY = posY;
 		this.posX = posX;
 		this.rotation = rotation;

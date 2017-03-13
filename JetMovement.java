@@ -67,7 +67,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         w.setVisible(true);
         w.addKeyListener(this);
         enemies.add(new enemy());
-        //explosions.add(new explosion(100, 200,200));
+        explosions.add(new explosion(100, 200,200));
     }
 
 
@@ -126,11 +126,19 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         }
         //explosion stuff
         for(explosion ex : explosions){
+            if(ex.particles.size() != 0){
             for(explosionParticle ep : ex.particles){
-                ep.posX += Math.sin(Math.toRadians(ep.rotation));
-                ep.posY -= Math.cos(Math.toRadians(ep.rotation));
-                ep.lifeTime -= 0.001;
+                //if(ep.lifeTime >=0){
+                ep.posX +=  ep.speed * Math.sin(Math.toRadians(ep.rotation));
+                ep.posY -= ep.speed * Math.cos(Math.toRadians(ep.rotation));
+                ep.lifeTime -= 0.01;
+            //}
             }
+        }
+        else{
+            explosions.remove(ex);
+        }
+        
         }
 
         //Normalize the rotations (map to 0-360)
