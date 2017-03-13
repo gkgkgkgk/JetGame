@@ -19,11 +19,17 @@ public class player {
         double height = 30.0;
         double rotation;
         Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
+        Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);
         public player() {
 
 
         }
-
+        public void checkCollision(ArrayList<bullet> bullets){
+		for(bullet b : bullets){
+			Rectangle r2 = b.bounds;
+			 if (r2.intersects(bounds)) {
+                System.out.println("Collision with bullet at" + xPos+", "+yPos);
+            }
+		}
+	}  
     }
-
-    

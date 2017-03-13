@@ -21,6 +21,7 @@ public class bullet {
         double speed;
         Image img = new ImageIcon(this.getClass().getResource("bullet.png")).getImage();
         Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+        Rectangle bounds = new Rectangle((int)xPos, (int)yPos, 5,5);
 
         ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
 

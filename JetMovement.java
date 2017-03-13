@@ -70,6 +70,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
+        p.bounds = new Rectangle((int)p.xPos, (int)p.yPos, 30,30);
+
         //manage Particles
         if (particleCounter <= 100) {
             particleCounter += 1;
@@ -87,13 +89,16 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 b.trail.remove(0);
                 b.particleCounter -= 1;
             }
+        b.bounds = new Rectangle((int)b.xPos, (int)b.yPos, 5,5);
+
         }
         //particle trails and bullets for enemies
         for (enemy en: enemies) {
             en.targetPosX = p.xPos;
             en.targetPosY = p.yPos;
             en.move();
-            en.shotCoolDown -= 1;
+            en.checkCollision(bullets); //every enemy should check for a collision with bullets
+            p.checkCollision(en.bullets); //check player collision with enemy bullets
             if (en.particleCounter <= 100) {
                 en.particleCounter += 1;
                 en.trail.add(new particleTrail(en));

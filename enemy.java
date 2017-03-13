@@ -41,14 +41,15 @@ public class enemy {
 	ArrayList < bullet > bullets = new ArrayList < bullet > ();
 	int shotCoolDown = 100; // 1 bullet per second
     int particleCounter = 0;
-	
+	Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);
+
 	public enemy (){ //hehe
 	
 	}
 	
 	public void move(){	
 		System.out.println(shotCoolDown);
-        findVelocityY();
+        /*findVelocityY();
         findAccelerationX();
         findVelocityX();
         findAccelerationY();
@@ -57,10 +58,12 @@ public class enemy {
         lerpRotation(); //smoother, more inaccurate rotation
 		//System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
 		forceX = 350 * Math.sin(Math.toRadians(rotation));
-        forceY = -350 * Math.cos(Math.toRadians(rotation));
+        forceY = -350 * Math.cos(Math.toRadians(rotation));*/
+        shotCoolDown -= 1;
         if(Math.abs(desiredRot - rotation) < 5 && shotCoolDown <= 0){ // if target is within 5 degress, change to velocity later
         	shoot();
 		}
+		bounds = new Rectangle((int)xPos, (int)yPos, 30,30);
 	}
 	
 
@@ -118,6 +121,13 @@ public class enemy {
         accelerationX = (forceX / mass);
     }
 
-  
+	public void checkCollision(ArrayList<bullet> bullets){
+		for(bullet b : bullets){
+			Rectangle r2 = b.bounds;
+			 if (r2.intersects(bounds)) {
+                System.out.println("Collision with bullet at" + xPos+", "+yPos);
+            }
+		}
+	}  
 
 	}
