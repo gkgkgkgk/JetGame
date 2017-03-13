@@ -16,9 +16,10 @@ public class particleTrail {
         Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
         double xPos;
         double yPos;
+                //particle trail for plane/player
 
         public particleTrail(player p) {
-                //particle trail for plane/player
+                //its 10 so it is behind the plane, make it look like it is coming out of the plane.
                 xPos = 10 + p.xPos - (15 * (Math.sin(Math.toRadians(p.rotation))));
                 yPos = 10 + p.yPos - (15 * (-Math.cos(Math.toRadians(p.rotation))));
             }

@@ -41,6 +41,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
     ArrayList < bullet > bullets = new ArrayList < bullet > ();
     ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
     ArrayList < enemy > enemies = new ArrayList < enemy > ();
+    ArrayList < explosion > explosions = new ArrayList < explosion > ();
     int particleCounter = 0;
     public enum state {
         UP,
@@ -66,10 +67,12 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         w.setVisible(true);
         w.addKeyListener(this);
         enemies.add(new enemy());
+        //explosions.add(new explosion(100, 200,200));
     }
 
 
     public void actionPerformed(ActionEvent e) {
+
         p.bounds = new Rectangle((int)p.xPos, (int)p.yPos, 30,30);
 
         //manage Particles
@@ -90,7 +93,8 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 b.particleCounter -= 1;
             }
         b.bounds = new Rectangle((int)b.xPos, (int)b.yPos, 5,5);
-
+        b.xPos += b.speed * b.xRot;
+            b.yPos += b.speed * b.yRot;
         }
         //particle trails and bullets for enemies
         for (enemy en: enemies) {
@@ -120,7 +124,14 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             }
 
         }
-
+        //explosion stuff
+        for(explosion ex : explosions){
+            for(explosionParticle ep : ex.particles){
+                ep.posX += Math.sin(Math.toRadians(ep.rotation));
+                ep.posY -= Math.cos(Math.toRadians(ep.rotation));
+                ep.lifeTime -= 0.001;
+            }
+        }
 
         //Normalize the rotations (map to 0-360)
         if (p.rotation > 360) {
@@ -139,10 +150,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             p.img = new ImageIcon(this.getClass().getResource("planeLeft.png")).getImage();
             s = state.LEFT;
         }
-        for (bullet b: bullets) {
-            b.xPos += b.speed * b.xRot;
-            b.yPos += b.speed * b.yRot;
-        }
+
         //System.out.println(p.rotation+" degrees");
         //System.out.print("Sin "+Math.sin(p.rotation));
         //System.out.print("Cos "+Math.cos(p.rotation));
@@ -325,6 +333,14 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         }
         g2d.setTransform(old);
 
+        for(explosion ex : explosions){
+            for(explosionParticle ep : ex.particles){
+                //g2d.translate(ep.posX, ep.posY); // Translate the center of our coordinates.
+                //g2d.rotate(Math.toRadians(ep.rotation), 5, 5);
+                g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
+
+            }
+        }
 
     }
 
