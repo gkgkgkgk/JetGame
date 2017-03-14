@@ -13,6 +13,8 @@ import java.lang.Math;
 import java.awt.geom.AffineTransform;
 
 public class player {
+		double maxHealth = 100;
+		double health = 100;
         double xPos;
         double yPos;
         double width = 30.0;
@@ -29,8 +31,10 @@ public class player {
         public void checkCollision(ArrayList<bullet> bullets){
 		for(bullet b : bullets){
 			Rectangle r2 = b.bounds;
-			 if (r2.intersects(bounds)) {
-                System.out.println("Player Collision with bullet at" + xPos+", "+yPos);
+			bounds = new Rectangle((int)xPos, (int)yPos,30,30);
+			 if (r2.intersects(bounds) || bounds.intersects(r2)) {
+			 	System.out.println("hit!");
+                health -= 10;
             }
 		}
 	}  

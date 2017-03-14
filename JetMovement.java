@@ -72,41 +72,25 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
-
-        p.bounds = new Rectangle((int)p.xPos, (int)p.yPos, 30,30);
-
-        //manage Particles
-        if (particleCounter <= 100) {
-            particleCounter += 1;
-            trail.add(new particleTrail(p));
-        } else {
-            trail.remove(0);
-            particleCounter -= 1;
-        }
-        //bullet particles/trails
-        for (bullet b: bullets) {
-            if (b.particleCounter <= 10) {
-                b.particleCounter += 1;
-                b.trail.add(new particleTrail(b));
-            } else {
-                b.trail.remove(0);
-                b.particleCounter -= 1;
-            }
-        b.bounds = new Rectangle((int)b.xPos, (int)b.yPos, 5,5);
-        b.xPos += b.speed * b.xRot;
-            b.yPos += b.speed * b.yRot;
-        }
         //particle trails and bullets for enemies
         for (int i = 0; i < enemies.size(); i++) { 
             // needed to switch to a regular for loop because the foreach loop 
             // has issues with iterators and removing objects. Instead of using the iterator i just switched directly
             // to a regular for loop.    
             enemy en = enemies.get(i);
+            if(p != null){
             en.targetPosX = p.xPos;
             en.targetPosY = p.yPos;
+            p.checkCollision(en.bullets); //check player collision with enemy bullets
+
+        	}
+        	else{
+        		en.targetPosX = 640;
+           		en.targetPosY = 360;
+           		en.target = false;
+        	}
             en.move();
             en.checkCollision(bullets); //every enemy should check for a collision with bullets
-            p.checkCollision(en.bullets); //check player collision with enemy bullets
             if (en.particleCounter <= 100) {
                 en.particleCounter += 1;
                 en.trail.add(new particleTrail(en));
@@ -125,6 +109,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 }
                 b.xPos += b.speed * b.xRot;
                 b.yPos += b.speed * b.yRot;
+                b.bounds = new Rectangle((int)b.xPos, (int)b.yPos, 5,5);
             }
             if(en.health <= 0){
                 explosions.add(new explosion(50, (int)en.xPos, (int)en.yPos));
@@ -162,7 +147,29 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         
         }
 
-        //Normalize the rotations (map to 0-360)
+		
+	    if(p != null){ //if the player is not dead
+        //manage Particles
+        if (particleCounter <= 100) {
+            particleCounter += 1;
+            trail.add(new particleTrail(p));
+        } else {
+            trail.remove(0);
+            particleCounter -= 1;
+        }
+        //bullet particles/trails
+        for (bullet b: bullets) {
+            if (b.particleCounter <= 10) {
+                b.particleCounter += 1;
+                b.trail.add(new particleTrail(b));
+            } else {
+                b.trail.remove(0);
+                b.particleCounter -= 1;
+            }
+        b.bounds = new Rectangle((int)b.xPos, (int)b.yPos, 5,5);
+        b.xPos += b.speed * b.xRot;
+            b.yPos += b.speed * b.yRot;
+        }
         if (p.rotation > 360) {
             p.rotation -= 360;
         } else if (p.rotation < -360) {
@@ -203,6 +210,13 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             forceX = 350 * Math.sin(Math.toRadians(p.rotation)); // the number 500 is the thrust
             forceY = -350 * Math.cos(Math.toRadians(p.rotation));
         }
+        //if player is dead....
+        if(p.health <= 0){
+            explosions.add(new explosion(50, (int)p.xPos, (int)p.yPos));
+			p = null;
+	    }
+
+    }        
 
         //	/System.out.println("Velocty: "+velocity);
         time++;
@@ -307,6 +321,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         //draw trail
         Composite c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
             .1f);
+        if(p != null){
         for (particleTrail p: trail) {
             c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                 (float)(1f / pCounter));
@@ -328,11 +343,11 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 g2d.setComposite(c);
                 pCounter -= 1;
 
-                g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+                g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
             g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
         }
-
+    }
         //draw enemies
         for (enemy e: enemies) {
             //System.out.println("enemies are being drawn");
@@ -346,7 +361,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 g2d.setComposite(c);
                 pCounter -= 1;
-                g2d.drawImage(e.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+                g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
             for (bullet b: e.bullets) {
                 pCounter = b.trail.size();
@@ -354,8 +369,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                     c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                     g2d.setComposite(c);
                     pCounter -= 1;
-
-                    g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, 5, 5, j);
+                    g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
                 }
                 g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
             }
@@ -370,7 +384,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 	c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 	g2d.setComposite(c);
                 pCounter -= 1;
-                g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, 5, 5, j);
+                g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, p.size, p.size, j);
             }
             }
         }

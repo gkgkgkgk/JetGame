@@ -29,7 +29,7 @@ public class explosionParticle{
 	boolean trailBool = false;
 
 	public explosionParticle(double rotation, double posX, double posY){
-		lifeTime = Math.random() + 5;
+		lifeTime = Math.random() + 3;
 		speed = Math.random()*5;
 		if(speed >= 1 && speed <= 2.5){
 			img = new ImageIcon(this.getClass().getResource("images/orange.png")).getImage();

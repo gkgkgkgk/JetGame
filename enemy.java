@@ -16,7 +16,8 @@ import java.awt.geom.AffineTransform;
 
 
 public class enemy {
-	int health = 10;
+	double maxHealth =100;
+	double health = 100;
 	//variables to control AI
 	double mass = 1.0;
 	double xPos = 300;
@@ -42,7 +43,9 @@ public class enemy {
 	ArrayList < bullet > bullets = new ArrayList < bullet > ();
 	int shotCoolDown = 100; // 1 bullet per second
     int particleCounter = 0;
-	Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);
+	Rectangle bounds = new Rectangle((int)xPos, (int)yPos,30,30);
+
+	boolean target = true;
 
 	public enemy (){ //hehe
 	
@@ -61,7 +64,7 @@ public class enemy {
 		forceX = 350 * Math.sin(Math.toRadians(rotation));
         forceY = -350 * Math.cos(Math.toRadians(rotation));
         shotCoolDown -= 1;
-        if(Math.abs(desiredRot - rotation) < 5 && shotCoolDown <= 0){ // if target is within 5 degress, change to velocity later
+        if(Math.abs(desiredRot - rotation) < 5 && shotCoolDown <= 0 && target){ // if target is within 5 degress, change to velocity later
         	shoot();
 		}
 		bounds = new Rectangle((int)xPos, (int)yPos, 30,30);
@@ -69,8 +72,7 @@ public class enemy {
 	
 
 	public void shoot(){
-		bullet b = new bullet(this, 20);
-        bullets.add(b);
+        bullets.add(new bullet(this, 20));
         shotCoolDown = 100;
 	}
 
@@ -127,7 +129,7 @@ public class enemy {
 			Rectangle r2 = b.bounds;
 			 if (r2.intersects(bounds)) {
                 System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
-                health -= 2;
+                health -= 10;
             }
 		}
 	}  
