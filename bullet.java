@@ -19,8 +19,8 @@ public class bullet {
         double yRot;
         double xRot;
         double speed;
-        Image img = new ImageIcon(this.getClass().getResource("bullet.png")).getImage();
-        Image particleImg = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+        Image img = new ImageIcon(this.getClass().getResource("images/bullet.png")).getImage();
+        Image particleImg = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
         Rectangle bounds = new Rectangle((int)xPos, (int)yPos, 5,5);
 
         ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();

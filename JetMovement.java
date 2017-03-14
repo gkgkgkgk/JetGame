@@ -161,13 +161,13 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         }
         //image stuff
         if ((Math.abs(p.rotation) > 315) || (Math.abs(p.rotation) < 45) || (Math.abs(p.rotation) > 135 && Math.abs(p.rotation) < 225)) {
-            p.img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
+            p.img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
             s = state.UP;
         } else if ((p.rotation <= 135 && p.rotation >= 45) || (p.rotation >= -315 && p.rotation <= -225)) {
-            p.img = new ImageIcon(this.getClass().getResource("planeRight.png")).getImage();
+            p.img = new ImageIcon(this.getClass().getResource("images/planeRight.png")).getImage();
             s = state.RIGHT;
         } else {
-            p.img = new ImageIcon(this.getClass().getResource("planeLeft.png")).getImage();
+            p.img = new ImageIcon(this.getClass().getResource("images/planeLeft.png")).getImage();
             s = state.LEFT;
         }
 

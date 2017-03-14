@@ -15,7 +15,7 @@ import java.awt.geom.AffineTransform;
 
 public class explosionParticle{
 	
-	Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+	Image img = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
 
 	double posX;
 	double posY;

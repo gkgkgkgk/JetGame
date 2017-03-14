@@ -13,7 +13,7 @@ import java.lang.Math;
 import java.awt.geom.AffineTransform;
 
 public class particleTrail {
-        Image img = new ImageIcon(this.getClass().getResource("player.png")).getImage();
+        Image img = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
         double xPos;
         double yPos;
                 //particle trail for plane/player

@@ -18,7 +18,7 @@ public class player {
         double width = 30.0;
         double height = 30.0;
         double rotation;
-        Image img = new ImageIcon(this.getClass().getResource("plane-1.png")).getImage();
+        Image img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
         Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);
         
         public player() {
