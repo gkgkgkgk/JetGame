@@ -16,6 +16,7 @@ import java.awt.geom.AffineTransform;
 
 
 public class enemy {
+	int health = 10;
 	//variables to control AI
 	double mass = 1.0;
 	double xPos = 300;
@@ -126,6 +127,7 @@ public class enemy {
 			Rectangle r2 = b.bounds;
 			 if (r2.intersects(bounds)) {
                 System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
+                health -= 2;
             }
 		}
 	}  

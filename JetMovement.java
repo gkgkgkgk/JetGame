@@ -97,7 +97,11 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             b.yPos += b.speed * b.yRot;
         }
         //particle trails and bullets for enemies
-        for (enemy en: enemies) {
+        for (int i = 0; i < enemies.size(); i++) { 
+            // needed to switch to a regular for loop because the foreach loop 
+            // has issues with iterators and removing objects. Instead of using the iterator i just switched directly
+            // to a regular for loop.    
+            enemy en = enemies.get(i);
             en.targetPosX = p.xPos;
             en.targetPosY = p.yPos;
             en.move();
@@ -122,17 +126,25 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 b.xPos += b.speed * b.xRot;
                 b.yPos += b.speed * b.yRot;
             }
-
+            if(en.health <= 0){
+                explosions.add(new explosion(20, (int)en.xPos, (int)en.yPos));
+                enemies.remove(en);
+            }
         }
         //explosion stuff
-        for(explosion ex : explosions){
+        for(int i = 0; i < explosions.size(); i++){
+            explosion ex = explosions.get(i);
             if(ex.particles.size() != 0){
-            for(explosionParticle ep : ex.particles){
-                //if(ep.lifeTime >=0){
+            for(int z = 0; z < ex.particles.size(); z++){
+                explosionParticle ep = ex.particles.get(z);
+                if(ep.lifeTime >=0){
                 ep.posX +=  ep.speed * Math.sin(Math.toRadians(ep.rotation));
                 ep.posY -= ep.speed * Math.cos(Math.toRadians(ep.rotation));
                 ep.lifeTime -= 0.01;
-            //}
+            }
+            else{
+                ex.particles.remove(ep);
+            }
             }
         }
         else{
@@ -343,10 +355,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
         for(explosion ex : explosions){
             for(explosionParticle ep : ex.particles){
-                //g2d.translate(ep.posX, ep.posY); // Translate the center of our coordinates.
-                //g2d.rotate(Math.toRadians(ep.rotation), 5, 5);
                 g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
-
             }
         }
 

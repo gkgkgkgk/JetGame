@@ -23,6 +23,7 @@ public class explosionParticle{
 	double lifeTime = 1.0;
 	double speed;
 	public explosionParticle(double rotation, double posX, double posY){
+		lifeTime = Math.random() + 1;
 		speed = Math.random()*10;
 		this.posY = posY;
 		this.posX = posX;
