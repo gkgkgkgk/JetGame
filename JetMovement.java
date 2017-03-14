@@ -127,7 +127,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 b.yPos += b.speed * b.yRot;
             }
             if(en.health <= 0){
-                explosions.add(new explosion(20, (int)en.xPos, (int)en.yPos));
+                explosions.add(new explosion(50, (int)en.xPos, (int)en.yPos));
                 enemies.remove(en);
             }
         }
@@ -141,6 +141,15 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
                 ep.posX +=  ep.speed * Math.sin(Math.toRadians(ep.rotation));
                 ep.posY -= ep.speed * Math.cos(Math.toRadians(ep.rotation));
                 ep.lifeTime -= 0.01;
+                if(ep.trailBool){
+                if (ep.particleCounter <= 10) {
+                ep.particleCounter += 1;
+                ep.trail.add(new particleTrail(ep));
+            } else {
+                ep.trail.remove(0);
+                ep.particleCounter -= 1;
+            }
+        }
             }
             else{
                 ex.particles.remove(ep);
@@ -356,6 +365,13 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         for(explosion ex : explosions){
             for(explosionParticle ep : ex.particles){
                 g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
+                pCounter = ep.trail.size();
+                for(particleTrail p : ep.trail){
+                	c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
+                	g2d.setComposite(c);
+                pCounter -= 1;
+                g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, 5, 5, j);
+            }
             }
         }
 

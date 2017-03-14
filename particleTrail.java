@@ -33,4 +33,10 @@ public class particleTrail {
                 xPos = 10 + e.xPos - (15 * (Math.sin(Math.toRadians(e.rotation))));
                 yPos = 10 + e.yPos - (15 * (-Math.cos(Math.toRadians(e.rotation))));
             }
+        public particleTrail(explosionParticle e) {
+            //particle trail for plane/player
+            xPos = 1 + e.posX - (1 * (Math.sin(Math.toRadians(e.rotation))));
+            yPos = 1 + e.posY - (1 * (-Math.cos(Math.toRadians(e.rotation))));
+            img = new ImageIcon(this.getClass().getResource("images/red.png")).getImage();
+        }
     }

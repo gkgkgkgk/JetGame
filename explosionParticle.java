@@ -22,9 +22,27 @@ public class explosionParticle{
 	double rotation;
 	double lifeTime = 1.0;
 	double speed;
+
+	ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
+
+	int particleCounter = 0;
+	boolean trailBool = false;
+
 	public explosionParticle(double rotation, double posX, double posY){
-		lifeTime = Math.random() + 1;
-		speed = Math.random()*10;
+		lifeTime = Math.random() + 5;
+		speed = Math.random()*5;
+		if(speed >= 1 && speed <= 2.5){
+			img = new ImageIcon(this.getClass().getResource("images/orange.png")).getImage();
+			trailBool = true;
+		}
+		else if(speed > 2.5){
+			img = new ImageIcon(this.getClass().getResource("images/red.png")).getImage();
+			trailBool = true;
+		}
+		else{
+			img = new ImageIcon(this.getClass().getResource("images/black.png")).getImage();
+			speed = Math.random();
+		}
 		this.posY = posY;
 		this.posX = posX;
 		this.rotation = rotation;
