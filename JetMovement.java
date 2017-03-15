@@ -186,7 +186,6 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             p.img = new ImageIcon(this.getClass().getResource("images/planeLeft.png")).getImage();
             s = state.LEFT;
         }
-
         //System.out.println(p.rotation+" degrees");
         //System.out.print("Sin "+Math.sin(p.rotation));
         //System.out.print("Cos "+Math.cos(p.rotation));
@@ -201,7 +200,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         if (right) {
             //System.out.println("right");
             p.rotation += rotationSpeed;
-        }
+        }   
         if (left) {
             //System.out.println("left");
             p.rotation -= rotationSpeed;
@@ -210,14 +209,13 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             forceX = 350 * Math.sin(Math.toRadians(p.rotation)); // the number 500 is the thrust
             forceY = -350 * Math.cos(Math.toRadians(p.rotation));
         }
+        p.regenerateHealth();
         //if player is dead....
         if(p.health <= 0){
             explosions.add(new explosion(50, (int)p.xPos, (int)p.yPos));
 			p = null;
 	    }
-	    p.regenerateHealth();
     }        
-
         //	/System.out.println("Velocty: "+velocity);
         time++;
         repaint();
@@ -355,7 +353,6 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             g2d.rotate(Math.toRadians(e.rotation), 15, 15);
             g2d.drawImage(e.img, 0, 0, e.width, e.height, j);
             pCounter = e.trail.size();
-
             g2d.setTransform(old);
             for (particleTrail part: e.trail) {
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));

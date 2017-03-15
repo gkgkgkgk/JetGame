@@ -128,7 +128,7 @@ public class enemy {
 		for(bullet b : bullets){
 			Rectangle r2 = b.bounds;
 			 if (r2.intersects(bounds)) {
-                System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
+                //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
                 health -= 10;
             }
 		}

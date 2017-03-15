@@ -35,7 +35,7 @@ public class player {
 			Rectangle r2 = b.bounds;
 			bounds = new Rectangle((int)xPos, (int)yPos,30,30);
 			 if (r2.intersects(bounds) || bounds.intersects(r2)) {
-			 	System.out.println("hit!");
+			 	//System.out.println("hit!");
                 health -= 10;
                 lastHitTime = 5.0;
             }
@@ -43,7 +43,7 @@ public class player {
 	}  
 
 	public void regenerateHealth(){
-		System.out.println(health);
+		//System.out.println(health);
 		lastHitTime -= 0.01;
 		if(lastHitTime <= 0 && health <= maxHealth){
 			health += 0.05;
