@@ -67,7 +67,6 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         w.setVisible(true);
         w.addKeyListener(this);
         enemies.add(new enemy());
-        explosions.add(new explosion(100, 200,200));
     }
 
 

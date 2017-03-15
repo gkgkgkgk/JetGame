@@ -125,11 +125,13 @@ public class enemy {
     }
 
 	public void checkCollision(ArrayList<bullet> bullets){
-		for(bullet b : bullets){
+		for(int i = 0; i < bullets.size(); i++){
+			bullet b = bullets.get(i);
 			Rectangle r2 = b.bounds;
 			 if (r2.intersects(bounds)) {
                 //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
                 health -= 10;
+                bullets.remove(b);
             }
 		}
 	}  
