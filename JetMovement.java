@@ -215,7 +215,7 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
             explosions.add(new explosion(50, (int)p.xPos, (int)p.yPos));
 			p = null;
 	    }
-
+	    p.regenerateHealth();
     }        
 
         //	/System.out.println("Velocty: "+velocity);

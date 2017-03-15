@@ -13,16 +13,18 @@ import java.lang.Math;
 import java.awt.geom.AffineTransform;
 
 public class player {
-		double maxHealth = 100;
-		double health = 100;
+		double maxHealth = 200;
+		double health = 200;
         double xPos;
         double yPos;
         double width = 30.0;
         double height = 30.0;
         double rotation;
         Image img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
-        Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);
-        
+        Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);        
+        //regenrate health var
+        double lastHitTime = 5.0;
+
         public player() {
 
 
@@ -35,7 +37,17 @@ public class player {
 			 if (r2.intersects(bounds) || bounds.intersects(r2)) {
 			 	System.out.println("hit!");
                 health -= 10;
+                lastHitTime = 5.0;
             }
 		}
 	}  
+
+	public void regenerateHealth(){
+		System.out.println(health);
+		lastHitTime -= 0.01;
+		if(lastHitTime <= 0 && health <= maxHealth){
+			health += 0.05;
+		}
+	}
+
     }
