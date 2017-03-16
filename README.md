@@ -5,12 +5,12 @@
 
 Commit #1
 
-![alt text](gifs/0.gif "0"  width="100")
+![alt text](gifs/0.gif "0" | width=100)
 
 Commit #20
 
-![alt text](gifs/1.gif "1"  width="100")
+![alt text](gifs/1.gif "1" | width=100)
 
 Commit #40
 
-![alt text](gifs/2.gif "2"  width="100")
+![alt text](gifs/2.gif "2" | width=100)
