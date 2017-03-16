@@ -66,7 +66,9 @@ public class JetMovement extends JPanel implements KeyListener, ActionListener {
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         w.setVisible(true);
         w.addKeyListener(this);
-        enemies.add(new enemy());
+        enemies.add(new enemy(300,100));
+        enemies.add(new enemy(500,100));
+
     }
 
 

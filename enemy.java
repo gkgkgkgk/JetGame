@@ -47,8 +47,9 @@ public class enemy {
 
 	boolean target = true;
 
-	public enemy (){ //hehe
-	
+	public enemy (int x, int y){ //hehe
+		this.yPos = y;
+		this.xPos = x;
 	}
 	
 	public void move(){	
