@@ -22,10 +22,10 @@ public class main extends JPanel implements ActionListener{
 	JButton start;
 	Font font;
 	    int time = 0;
-
+	    Timer t;
 	enemy en = new enemy(900,400);
 	public main(){
-		Timer t = new Timer(10, this);
+		 t = new Timer(10, this);
 		        t.start();
 
 		getFonts();
@@ -36,8 +36,9 @@ public class main extends JPanel implements ActionListener{
 		start = new JButton("Start");
 		start.setBounds(350,275,100,50); // x y size
 		start.setFont(font);
-		start.setBackground(Color.RED);
-        start.setForeground(Color.RED);
+		start.setBackground(Color.BLACK); 
+		start.setOpaque(true); 
+		start.setForeground(Color.RED);
 		start.setFocusPainted(false);
 		start.addActionListener(this);
 		add(start);
@@ -58,7 +59,7 @@ public class main extends JPanel implements ActionListener{
 			if(e.getSource() == start){
 				new JetMovement();
 				w.setVisible(false); //what...
-				timer.stop();
+				t.stop();
 			}
 			en.targetPosX = 400;
            	en.targetPosY = 300;
