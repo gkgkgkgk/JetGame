@@ -38,7 +38,7 @@ public class enemy {
 	double targetPosY;
 	double gravity = 9.87;
 	ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
-	Image img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();	
+	Image img = new ImageIcon(this.getClass().getResource("images/plane-1Enemy.png")).getImage();	
 	Image particleImg = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
 	ArrayList < bullet > bullets = new ArrayList < bullet > ();
 	int shotCoolDown = 100; // 1 bullet per second

@@ -45,6 +45,11 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     int particleCounter = 0;
     boolean boost = false;
 
+
+    JLabel wave;
+    int waveNumber = 0;
+    boolean waveOver = false;
+
     public enum state {
         UP,
         DOWN,
@@ -57,6 +62,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
 
     public Survival() {
+        wave = new JLabel("Wave " + waveNumber);
         Timer t = new Timer(10, this);
         t.start();
         p.xPos = 640;
@@ -68,11 +74,21 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         w.setVisible(true);
         w.addKeyListener(this);
-        enemies.add(new enemy(-20, -20, p));
+        //enemies.add(new enemy(-20, -20, p));
+        add(wave);
     }
 
 
     public void actionPerformed(ActionEvent e) {
+        if(enemies.size() == 0){
+            wave.setText("Wave " + waveNumber);
+            waveNumber += 1;
+            int x = ((1280/waveNumber +1));
+            for(int i = 0; i < waveNumber-1; i++){
+                enemies.add(new enemy(x, 0, p));
+                 x += (1280/waveNumber +1);
+            }
+        }
         //particle trails and bullets for enemies
         for (int i = 0; i < enemies.size(); i++) {
             // needed to switch to a regular for loop because the foreach loop 
@@ -82,16 +98,17 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             if (en.playerTarget != null) {
                 en.targetPosX = en.playerTarget.xPos;
                 en.targetPosY = en.playerTarget.yPos;
-                p.checkCollision(en.bullets); //check player collision with enemy bullets
-
+                en.checkCollision(bullets); //every enemy should check for a collision with bullets
+                en.checkCollision(en.playerTarget);
+                en.playerTarget.checkCollision(en.bullets); //check player collision with enemy bullets
+                //WHY DOES IT CRASH WHEN THE PLAYER DIES?!?!?!?!?!?!?!?!?!? NVM I FIXED IT
             } else {
                 en.targetPosX = 640;
                 en.targetPosY = 360;
                 en.target = false;
             }
             en.move();
-            en.checkCollision(bullets); //every enemy should check for a collision with bullets
-            en.checkCollision(p);
+            
             if (en.particleCounter <= 100) {
                 en.particleCounter += 1;
                 en.trail.add(new particleTrail(en));
@@ -194,6 +211,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             findAccelerationX();
             findVelocityX();
             //System.out.println("position:"+ p.yPos + "  velocity: "+ velocityY);
+            
             p.yPos += velocityY * 0.02; //realistacally should be 0.01 not 0.02, 
             p.xPos += velocityX * 0.02; //but 0.02 makes the game quicker and the plane more manueverable
 
@@ -220,7 +238,19 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 forceY = 0;
             }
             }
-
+            
+            if(p.xPos < 0){
+                p.xPos = 1280;
+            }
+            if (p.xPos > 1280){
+                p.xPos = 0;
+            }
+            if (p.yPos < 0){
+                p.yPos = 720;
+            }
+            if (p.yPos > 720){
+                p.yPos = 0;
+            }
             
             p.regenerateHealth();
             //if player is dead....
@@ -228,6 +258,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 explosions.add(new explosion(50, (int) p.xPos, (int) p.yPos));
                 p = null;
             }
+
         }
         time++;
         repaint();
