@@ -16,8 +16,8 @@ import java.awt.geom.AffineTransform;
 
 
 public class enemy {
-	double maxHealth =100;
-	double health = 100;
+	double maxHealth = 50;
+	double health = 50;
 	//variables to control AI
 	double mass = 1.0;
 	double xPos = 300;
@@ -135,6 +135,15 @@ public class enemy {
                 bullets.remove(b);
             }
 		}
-	}  
-
 	}
+
+public void checkCollision(player p){
+			Rectangle r2 = p.bounds;
+			 if (r2.intersects(bounds) && p.boost) {
+                //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
+                health -= 25;
+                p.health -= 0;//p.maxHealth; //remember to take health away from player for colliding (wtihout crashing everything please!)
+            }
+		}
+	
+}

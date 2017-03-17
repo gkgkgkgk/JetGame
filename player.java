@@ -24,7 +24,7 @@ public class player {
         Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);        
         //regenrate health var
         double lastHitTime = 5.0;
-
+        boolean boost = false;
         public player() {
 
 
