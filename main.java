@@ -37,7 +37,7 @@ public class main extends JPanel implements ActionListener {
         w.setVisible(true);
         setBackground(new Color(35, 106, 135)); //todo: add moving clouds
         start = new JButton("Start");
-        start.setBounds(350, 275, 100, 50); // x y size
+        start.setBounds(300, 275, 200, 50); // x y size
         start.setFont(font);
         start.setBackground(Color.BLACK);
         start.setOpaque(false);
@@ -73,7 +73,7 @@ public class main extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == start) {
-            new JetMovement();
+            new Survival();
             w.setVisible(false); //what...
             t.stop();
         }

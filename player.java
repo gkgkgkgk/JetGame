@@ -31,15 +31,17 @@ public class player {
         }
 
         public void checkCollision(ArrayList<bullet> bullets){
-		for(bullet b : bullets){
-			Rectangle r2 = b.bounds;
-			bounds = new Rectangle((int)xPos, (int)yPos,30,30);
-			 if (r2.intersects(bounds) || bounds.intersects(r2)) {
-			 	//System.out.println("hit!");
+            for(int i = 0; i < bullets.size(); i++){
+            bullet b = bullets.get(i);
+            Rectangle r2 = b.bounds;
+            bounds = new Rectangle((int)xPos, (int)yPos,30,30);
+             if (r2.intersects(bounds) || bounds.intersects(r2)) {
+                System.out.println("Player Collision with bullet at" + xPos+", "+yPos);
                 health -= 10;
+                bullets.remove(b);
                 lastHitTime = 5.0;
             }
-		}
+        }
 	}  
 
 	public void regenerateHealth(){

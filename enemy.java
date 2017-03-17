@@ -47,13 +47,28 @@ public class enemy {
 
 	boolean target = true;
 
+	player playerTarget;
+	enemy enemyTarget;
+
+
+
+	public enemy (int x, int y, player t){ //hehe
+		this.yPos = y;
+		this.xPos = x;
+		this.playerTarget = t;
+	}
+	public enemy (int x, int y, enemy t){ //hehe
+		this.yPos = y;
+		this.xPos = x;
+		this.enemyTarget = t;
+		//enemy constructer for targeting enemies for AI testing
+	}
 	public enemy (int x, int y){ //hehe
 		this.yPos = y;
 		this.xPos = x;
 	}
 	
 	public void move(){	
-		//System.out.println(shotCoolDown);
         findVelocityY();
         findAccelerationX();
         findVelocityX();
