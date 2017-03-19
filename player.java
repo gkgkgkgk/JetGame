@@ -23,7 +23,7 @@ public class player {
         Image img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
         Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);        
         //regenrate health var
-        double lastHitTime = 5.0;
+        double lastHitTime = 3.0;
         boolean boost = false;
         public player() {
 
@@ -39,7 +39,7 @@ public class player {
                 System.out.println("Player Collision with bullet at" + xPos+", "+yPos);
                 health -= 10;
                 bullets.remove(b);
-                lastHitTime = 5.0;
+                lastHitTime = 3.0;
             }
         }
 	}  

@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.Graphics;
 import java.util.*;
 import java.awt.Color;
@@ -13,7 +13,7 @@ import java.lang.Math;
 import java.awt.geom.AffineTransform;
 
 
-public class Survival extends JPanel implements KeyListener, ActionListener {
+public class JetMovement extends JPanel implements KeyListener, ActionListener {
 
     int time = 0;
     JFrame w;
@@ -30,7 +30,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     double inputForceX;
     double mass = 1.0;
     public player p = new player();
-    public static Survival j;
+    public static JetMovement j;
     boolean left = false;
     boolean right = false;
     boolean forward = false;
@@ -46,15 +46,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     boolean boost = false;
 
 
-    JLabel wave;
-    int waveNumber = 0;
-    boolean waveOver = false;
-    JLabel scoreText;
-    int score;
-    JLabel comboText;
-    int combo = 1;
-    double comboCounter = 3.0;
-
 
     public enum state {
         UP,
@@ -67,10 +58,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     Color bgColor = new Color(35, 106, 135);
 
 
-    public Survival() {
-        wave = new JLabel("Wave " + waveNumber);
-        scoreText = new JLabel("Score: 0");
-        comboText = new JLabel("Combo: " + combo);
+    public JetMovement() {
         Timer t = new Timer(10, this);
         t.start();
         p.xPos = 640;
@@ -82,50 +70,30 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         w.setVisible(true);
         w.addKeyListener(this);
-        add(wave);
-        add(scoreText);
-        add(comboText);
+        enemies.add(new enemy(300, 100));
     }
 
 
     public void actionPerformed(ActionEvent e) {
-    	if(comboCounter <= 0){
-    		combo = 1;
-    		comboText.setText("Combo: "+combo);
-
-    	}
-    	else{
-    	comboCounter -= 0.01;
-    	}
-        if(enemies.size() == 0){
-            wave.setText("Wave " + waveNumber);
-            waveNumber += 1;
-            int x = ((1280/waveNumber +1));
-            for(int i = 0; i < waveNumber-1; i++){
-                enemies.add(new enemy(x, 0, p, 100));
-                 x += (1280/waveNumber +1);
-            }
-        }
         //particle trails and bullets for enemies
         for (int i = 0; i < enemies.size(); i++) {
             // needed to switch to a regular for loop because the foreach loop 
             // has issues with iterators and removing objects. Instead of using the iterator i just switched directly
             // to a regular for loop.    
             enemy en = enemies.get(i);
-            if (en.playerTarget != null) {
-                en.targetPosX = en.playerTarget.xPos;
-                en.targetPosY = en.playerTarget.yPos;
-                en.checkCollision(bullets); //every enemy should check for a collision with bullets
-                en.checkCollision(en.playerTarget);
-                en.playerTarget.checkCollision(en.bullets); //check player collision with enemy bullets
-                //WHY DOES IT CRASH WHEN THE PLAYER DIES?!?!?!?!?!?!?!?!?!? NVM I FIXED IT
+            if (p != null) {
+                en.targetPosX = p.xPos;
+                en.targetPosY = p.yPos;
+                p.checkCollision(en.bullets); //check player collision with enemy bullets
+
             } else {
                 en.targetPosX = 640;
                 en.targetPosY = 360;
                 en.target = false;
             }
             en.move();
-            
+            en.checkCollision(bullets); //every enemy should check for a collision with bullets
+            en.checkCollision(p);
             if (en.particleCounter <= 100) {
                 en.particleCounter += 1;
                 en.trail.add(new particleTrail(en));
@@ -148,10 +116,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             }
             if (en.health <= 0) {
                 explosions.add(new explosion(50, (int) en.xPos, (int) en.yPos));
-                addScore(en.reward * combo); //add player score
-                comboCounter = 3.0; //reset combo counter
-                combo +=1;
-                comboText.setText("Combo: "+combo);
                 enemies.remove(en);
             }
         }
@@ -232,7 +196,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             findAccelerationX();
             findVelocityX();
             //System.out.println("position:"+ p.yPos + "  velocity: "+ velocityY);
-            
             p.yPos += velocityY * 0.02; //realistacally should be 0.01 not 0.02, 
             p.xPos += velocityX * 0.02; //but 0.02 makes the game quicker and the plane more manueverable
 
@@ -259,19 +222,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 forceY = 0;
             }
             }
-            System.out.println(boost);
-            if(p.xPos < 0){
-                p.xPos = 1280;
-            }
-            if (p.xPos > 1280){
-                p.xPos = 0;
-            }
-            if (p.yPos < 0){
-                p.yPos = 720;
-            }
-            if (p.yPos > 720){
-                p.yPos = 0;
-            }
+
             
             p.regenerateHealth();
             //if player is dead....
@@ -279,7 +230,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 explosions.add(new explosion(50, (int) p.xPos, (int) p.yPos));
                 p = null;
             }
-
         }
         time++;
         repaint();
@@ -288,10 +238,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         //System.out.println(velocityX);
     }
 
-    public void addScore(int addition){
-    	score += addition;
-    	scoreText.setText("Score: "+score);
-    }
+
 
 
     public void findVelocityY() {
@@ -384,7 +331,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             //System.out.println("w released");
             forward = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE && p != null) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE  && p != null) {
             //System.out.println("space released");
             boost = false;
             p.boost = false;
@@ -413,9 +360,9 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                     (float)(1f / pCounter));
                 g2d.setComposite(c);
                 pCounter -= 1;
-                //g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, 5, 5, j);
-                g2d.setColor(p.color);
+                g2d.setColor(Color.RED);
                 g2d.fillRect((int)p.xPos,(int)p.yPos,p.size, p.size);
+                //g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, 5, 5, j);
             }
             //draw player
             g2d.translate(p.xPos, p.yPos); // Translate the center of our coordinates.
@@ -448,6 +395,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 g2d.setComposite(c);
                 pCounter -= 1;
+                
                 g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
             for (bullet b: e.bullets) {
@@ -478,4 +426,4 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
     }
 
-}
+}*/

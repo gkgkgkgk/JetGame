@@ -17,24 +17,16 @@ public class particleTrail {
         double xPos;
         double yPos;
         int size = 5;
-                //particle trail for plane/player
+        //particle trail for plane/player
+        Rectangle particle;
+        Color color;
+
         public particleTrail(player p) {
                 //its 10 so it is behind the plane, make it look like it is coming out of the plane.
-        	 if((p.health/p.maxHealth)-Math.random() < 0 && (p.health/p.maxHealth)-Math.random() > -0.25){
-        	     	size = (int)Math.random()*3+8;
-                	img = new ImageIcon(this.getClass().getResource("images/black.png")).getImage();
-                }
-                else if((p.health/p.maxHealth)-Math.random() < -0.25){
-                	double d = Math.random();
-                	if(d > 0.5){
-                		size = 7;
-                	img = new ImageIcon(this.getClass().getResource("images/red.png")).getImage();
-                	}
-                	else{
-                		size = 5;
-                		img = new ImageIcon(this.getClass().getResource("images/orange.png")).getImage();
-                	}
-                }
+                if(p.health >= 0){
+                color = new Color(255,(int)((p.health/p.maxHealth)*255),(int)((p.health/p.maxHealth)*255),255) ;
+            	}
+            	else{color = Color.RED;}
                 xPos = 10 + p.xPos - (15 * (Math.sin(Math.toRadians(p.rotation))));
                 yPos = 10 + p.yPos - (15 * (-Math.cos(Math.toRadians(p.rotation))));
             }

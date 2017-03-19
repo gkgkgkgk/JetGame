@@ -49,18 +49,21 @@ public class enemy {
 
 	player playerTarget;
 	enemy enemyTarget;
+	int reward = 0;
 
 
-
-	public enemy (int x, int y, player t){ //hehe
+	public enemy (int x, int y, player t, int r){ //hehe
 		this.yPos = y;
 		this.xPos = x;
 		this.playerTarget = t;
+		this.reward = r;
 	}
-	public enemy (int x, int y, enemy t){ //hehe
+	public enemy (int x, int y, enemy t, int r){ //hehe
 		this.yPos = y;
 		this.xPos = x;
 		this.enemyTarget = t;
+		this.reward = r;
+
 		//enemy constructer for targeting enemies for AI testing
 	}
 	public enemy (int x, int y){ //hehe
@@ -157,7 +160,7 @@ public void checkCollision(player p){
 			 if (r2.intersects(bounds) && p.boost) {
                 //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
                 health -= 25;
-                p.health -= 0;//p.maxHealth; //remember to take health away from player for colliding (wtihout crashing everything please!)
+                p.health -= 25;//p.maxHealth; //remember to take health away from player for colliding (wtihout crashing everything please!)
             }
 		}
 	
