@@ -74,6 +74,7 @@ public class main extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == start) {
             new Survival();
+            System.out.println("New Survival");
             w.setVisible(false); //what...
             t.stop();
         }

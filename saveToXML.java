@@ -24,6 +24,7 @@ public class saveToXML {
     Element survival;
     Element scores;
     String survivalHighScore;
+    
     public saveToXML() {
 
     }

@@ -15,6 +15,9 @@ import java.awt.geom.AffineTransform;
 
 public class Survival extends JPanel implements KeyListener, ActionListener {
 
+    saveToXML save = new saveToXML();
+
+
     int time = 0;
     JFrame w;
 
@@ -261,7 +264,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 forceY = 0;
             }
             }
-            System.out.println(p.health);
+            //System.out.println(p.health);
             if(p.xPos < 0){
                 p.xPos = 1280;
             }
@@ -279,7 +282,13 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             //if player is dead....
             if (p.health <= 0) {
                 explosions.add(new explosion(50, (int) p.xPos, (int) p.yPos));
+                save.readFile();
+                if(Integer.parseInt(save.getHighScoreSurvival()) < score){ //if high score is broken
+                    save.setHighScoreSurvival(String.valueOf(score));
+                    save.writeToFile(); //write to file
+                }
                 p = null;
+
             }
 
         }
