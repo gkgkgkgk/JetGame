@@ -23,7 +23,7 @@ public class player {
         Image img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
         Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);        
         //regenrate health var
-        double lastHitTime = 3.0;
+        double lastHitTime = 1.0;
         boolean boost = false;
         public player() {
 
@@ -36,10 +36,10 @@ public class player {
             Rectangle r2 = b.bounds;
             bounds = new Rectangle((int)xPos, (int)yPos,30,30);
              if (r2.intersects(bounds) || bounds.intersects(r2)) {
-                System.out.println("Player Collision with bullet at" + xPos+", "+yPos);
+                //System.out.println("Player Collision with bullet at" + xPos+", "+yPos);
                 health -= 10;
                 bullets.remove(b);
-                lastHitTime = 3.0;
+                lastHitTime = 1.0;
             }
         }
 	}  

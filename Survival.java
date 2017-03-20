@@ -80,11 +80,13 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         w.setSize(1280, 720);
         w.setContentPane(this);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        w.setVisible(true);
         w.addKeyListener(this);
         add(wave);
         add(scoreText);
         add(comboText);
+        w.setResizable(false);
+        w.setVisible(true);
+       
     }
 
 
@@ -259,7 +261,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 forceY = 0;
             }
             }
-            System.out.println(boost);
+            System.out.println(p.health);
             if(p.xPos < 0){
                 p.xPos = 1280;
             }
