@@ -46,13 +46,13 @@ public class main extends JPanel implements ActionListener {
         start.setBorderPainted(false);
         start.addActionListener(this);
         title = new JLabel();
-        title.setBounds(200, 0, 1000, 100);
-        title.setText("Cool Title!");
+        title.setBounds(130, 0, 1000, 100);
+        title.setText("Hijack High Jinks");
         title.setFont(fontBig);
         title.setForeground(Color.BLACK);
         add(start);
         add(title);
-         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
 

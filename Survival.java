@@ -16,7 +16,8 @@ import java.awt.geom.AffineTransform;
 public class Survival extends JPanel implements KeyListener, ActionListener {
 
     saveToXML save = new saveToXML();
-
+    //you lose! stuff
+    JLabel youLose = new JLabel("You Lose!");
 
     int time = 0;
     JFrame w;
@@ -200,7 +201,8 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 particleCounter -= 1;
             }
             //bullet particles/trails
-            for (bullet b: bullets) {
+            for (int bu = 0; bu < bullets.size(); bu++) {
+                bullet b = bullets.get(bu);
                 if (b.particleCounter <= 10) {
                     b.particleCounter += 1;
                     b.trail.add(new particleTrail(b));
@@ -211,6 +213,9 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 b.bounds = new Rectangle((int) b.xPos, (int) b.yPos, 5, 5);
                 b.xPos += b.speed * b.xRot;
                 b.yPos += b.speed * b.yRot;
+                if(b.xPos < -50 || b.xPos > 1330 || b.yPos < -50 || b.yPos > 770){
+                    bullets.remove(bu);
+                }
             }
             if (p.rotation > 360) {
                 p.rotation -= 360;
@@ -287,6 +292,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                     save.setHighScoreSurvival(String.valueOf(score));
                     save.writeToFile(); //write to file
                 }
+                makeLosePanel();
                 p = null;
 
             }
@@ -298,6 +304,11 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         //| Velocity " + velocityX + ", " + velocityY + " | Force " + forceX + ", " + forceY);
         //System.out.println(velocityX);
     }
+
+    public void makeLosePanel(){
+        this.add(youLose);
+    }
+
 
     public void addScore(int addition){
     	score += addition;
@@ -371,11 +382,11 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             //System.out.println("w pressed");
             forward = true;
         }
-        if (e.getKeyChar() == 's' && !boost) { // cant shoot while boosting
+        if (e.getKeyCode() == KeyEvent.VK_SPACE && !boost) { // cant shoot while boosting
             //System.out.println("Shoot");
             shoot();
         }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE && p != null) {
+        if (e.getKeyChar() == 's' && p != null) {
             //System.out.println("space pressed");
             boost = true;
             p.boost = true;
@@ -395,7 +406,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             //System.out.println("w released");
             forward = false;
         }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE && p != null) {
+        if (e.getKeyChar() == 's' && p != null) {
             //System.out.println("space released");
             boost = false;
             p.boost = false;
