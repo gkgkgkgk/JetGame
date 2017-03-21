@@ -22,7 +22,7 @@ public class bullet {
         Image img = new ImageIcon(this.getClass().getResource("images/bullet.png")).getImage();
         Image particleImg = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
         Rectangle bounds = new Rectangle((int)xPos, (int)yPos, 5,5);
-
+        double lifeTime;
         ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
 
         int particleCounter = 0;

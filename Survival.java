@@ -146,7 +146,8 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 en.particleCounter -= 1;
             }
             //bullet particles/trails
-            for (bullet b: en.bullets) {
+            for (int f = 0; f < en.bullets.size(); f++) {
+                bullet b = en.bullets.get(f);
                 if (b.particleCounter <= 10) {
                     b.particleCounter += 1;
                     b.trail.add(new particleTrail(b));
@@ -157,6 +158,11 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 b.xPos += b.speed * b.xRot;
                 b.yPos += b.speed * b.yRot;
                 b.bounds = new Rectangle((int) b.xPos, (int) b.yPos, 5, 5);
+                //remove stray bullets
+                b.lifeTime += 0.01;
+                if(b.lifeTime>=300){
+                    en.bullets.remove(b);
+                }
             }
             if (en.health <= 0) {
                 explosions.add(new explosion(50, (int) en.xPos, (int) en.yPos));
