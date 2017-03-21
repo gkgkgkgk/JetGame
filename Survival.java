@@ -23,7 +23,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
     int time = 0;
     JFrame w;
-
     double gravity = 9.87;
     double maxVelocity = 100.0;
     double velocityX;
