@@ -98,12 +98,11 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == restart){
-            this.reset();
+            //this = new Survival();
         }
     	if(comboCounter <= 0){
     		combo = 1;
     		comboText.setText("Combo: "+combo);
-
     	}
     	else{
     	comboCounter -= 0.01;
@@ -124,6 +123,8 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             // to a regular for loop.    
             enemy en = enemies.get(i);
             if (en.playerTarget != null) {
+                            System.out.println(en.playerTarget == null);
+
                 en.targetPosX = en.playerTarget.xPos;
                 en.targetPosY = en.playerTarget.yPos;
                 en.checkCollision(bullets); //every enemy should check for a collision with bullets
@@ -299,7 +300,10 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 }
                 makeLosePanel();
                 p = null;
-
+                for (int i = 0; i < enemies.size(); i++) {
+                enemy en = enemies.get(i);
+                en.playerTarget = null;
+                }
             }
 
         }
