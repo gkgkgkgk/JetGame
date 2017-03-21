@@ -18,6 +18,8 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     saveToXML save = new saveToXML();
     //you lose! stuff
     JLabel youLose = new JLabel("You Lose!");
+    JButton restart = new JButton("Restart!");
+
 
     int time = 0;
     JFrame w;
@@ -95,6 +97,9 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == restart){
+            this.reset();
+        }
     	if(comboCounter <= 0){
     		combo = 1;
     		comboText.setText("Combo: "+combo);
@@ -307,6 +312,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
     public void makeLosePanel(){
         this.add(youLose);
+        this.add(restart);
     }
 
 
@@ -382,7 +388,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             //System.out.println("w pressed");
             forward = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE && !boost) { // cant shoot while boosting
+        if (e.getKeyCode() == KeyEvent.VK_SPACE && !boost && p!=null) { // cant shoot while boosting
             //System.out.println("Shoot");
             shoot();
         }
