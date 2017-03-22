@@ -46,7 +46,7 @@ public class player {
 
 	public void regenerateHealth(){
 		//System.out.println(health);
-		lastHitTime -= 0.01;
+		lastHitTime -= 0.02;
 		if(lastHitTime <= 0 && health <= maxHealth){
 			health += 0.05;
 		}

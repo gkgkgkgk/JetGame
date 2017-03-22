@@ -24,7 +24,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     int time = 0;
     JFrame w;
     double gravity = 9.87;
-    double maxVelocity = 100.0;
+    double maxVelocity = 200.0;
     double velocityX;
     double velocityY;
     double accelerationY;
@@ -40,7 +40,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     boolean right = false;
     boolean forward = false;
     boolean game = true;
-    double rotationSpeed = 2.5;
+    double rotationSpeed = 5;
     double lastX;
     double lastY;
     ArrayList < bullet > bullets = new ArrayList < bullet > ();
@@ -76,7 +76,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         wave = new JLabel("Wave " + waveNumber);
         scoreText = new JLabel("Score: 0");
         comboText = new JLabel("Combo: " + combo);
-        Timer t = new Timer(10, this);
+        Timer t = new Timer(20, this);
         t.start();
         p.xPos = 640;
         p.yPos = 360;
@@ -104,7 +104,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     		comboText.setText("Combo: "+combo);
     	}
     	else{
-    	comboCounter -= 0.01;
+    	comboCounter -= 0.02;
     	}
         if(enemies.size() == 0){
             wave.setText("Wave " + waveNumber);
@@ -158,7 +158,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 b.yPos += b.speed * b.yRot;
                 b.bounds = new Rectangle((int) b.xPos, (int) b.yPos, 5, 5);
                 //remove stray bullets
-                b.lifeTime += 0.01;
+                b.lifeTime += 0.02;
                 if(b.lifeTime>=300){
                     en.bullets.remove(b);
                 }
@@ -181,7 +181,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                     if (ep.lifeTime >= 0) {
                         ep.posX += ep.speed * Math.sin(Math.toRadians(ep.rotation));
                         ep.posY -= ep.speed * Math.cos(Math.toRadians(ep.rotation));
-                        ep.lifeTime -= 0.01;
+                        ep.lifeTime -= 0.02;
                         if (ep.trailBool) {
                             if (ep.particleCounter <= 10) {
                                 ep.particleCounter += 1;
@@ -254,8 +254,8 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             findVelocityX();
             //System.out.println("position:"+ p.yPos + "  velocity: "+ velocityY);
             
-            p.yPos += velocityY * 0.02; //realistacally should be 0.01 not 0.02, 
-            p.xPos += velocityX * 0.02; //but 0.02 makes the game quicker and the plane more manueverable
+            p.yPos += velocityY * 0.04; //realistacally should be 0.01 not 0.02, 
+            p.xPos += velocityX * 0.04; //but 0.02 makes the game quicker and the plane more manueverable
 
             //boost!
             if (boost) {
@@ -334,20 +334,20 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     public void findVelocityY() {
         if (forward) {
             if (Math.abs(velocityY) < maxVelocity) {
-                velocityY += accelerationY * 0.01;
+                velocityY += accelerationY * 0.02;
             } else if (velocityY > 0) {
                 velocityY = maxVelocity - 1;
             } else if (velocityY < 0) {
                 velocityY = (-maxVelocity) + 1;
             }
         } else {
-            velocityY += accelerationY * 0.01;
+            velocityY += accelerationY * 0.02;
         }
     }
     public void findVelocityX() {
         if (forward) {
             if (Math.abs(velocityX) < maxVelocity) {
-                velocityX += accelerationX * 0.01;
+                velocityX += accelerationX * 0.02;
             } else if (velocityX > 0) {
                 velocityX = maxVelocity - 1;
             } else if (velocityX < 0) {
@@ -357,9 +357,9 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             if (velocityX == 0) {
 
             } else if (velocityX > 0) {
-                velocityX -= mass * 0.01;
+                velocityX -= mass * 0.02;
             } else if (velocityX < 0) {
-                velocityX += mass * 0.01;
+                velocityX += mass * 0.02;
             }
 
         }
@@ -379,7 +379,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
 
     public void shoot() {
-        bullet b = new bullet(p, 20);
+        bullet b = new bullet(p, 40);
         bullets.add(b);
     }
 

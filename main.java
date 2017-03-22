@@ -28,7 +28,7 @@ public class main extends JPanel implements ActionListener {
     JLabel title;
     enemy en = new enemy(900, 400);
     public main() {
-        t = new Timer(10, this);
+        t = new Timer(20, this);
         t.start();
         setLayout(null);
         getFonts();
@@ -50,6 +50,9 @@ public class main extends JPanel implements ActionListener {
         title.setText("Hijack High Jinks");
         title.setFont(fontBig);
         title.setForeground(Color.BLACK);
+        en.targetPosX = 400;
+        en.targetPosY = 300;
+        en.target = false;
         add(start);
         add(title);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,9 +81,7 @@ public class main extends JPanel implements ActionListener {
             w.setVisible(false); //what...
             t.stop();
         }
-        en.targetPosX = 400;
-        en.targetPosY = 300;
-        en.target = false;
+        
         en.move();
         if (en.particleCounter <= 100) {
             en.particleCounter += 1;

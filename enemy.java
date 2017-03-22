@@ -76,8 +76,8 @@ public class enemy {
         findAccelerationX();
         findVelocityX();
         findAccelerationY();
-        yPos += velocityY * 0.02; 
-        xPos += velocityX * 0.02;
+        yPos += velocityY * 0.04; 
+        xPos += velocityX * 0.04;
         lerpRotation(); //smoother, more inaccurate rotation
 		//System.out.println(Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos))));
 		forceX = 350 * Math.sin(Math.toRadians(rotation));
@@ -115,7 +115,7 @@ public class enemy {
  public void findVelocityY() {
        
             if (Math.abs(velocityY) < maxVelocity) {
-                velocityY += accelerationY * 0.01;
+                velocityY += accelerationY * 0.02;
             } else if (velocityY > 0) {
                 velocityY = maxVelocity - 1;
             } else if (velocityX < 0) {
@@ -125,7 +125,7 @@ public class enemy {
     }
     public void findVelocityX() {
         if (Math.abs(velocityX) < maxVelocity) {
-            velocityX += accelerationX * 0.01;
+            velocityX += accelerationX * 0.02;
         } else if (velocityX > 0) {
             velocityX = maxVelocity - 1;
         } else if (velocityX < 0) {
