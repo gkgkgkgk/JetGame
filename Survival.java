@@ -49,7 +49,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     ArrayList < explosion > explosions = new ArrayList < explosion > ();
     int particleCounter = 0;
     boolean boost = false;
-
+    long startTime = System.currentTimeMillis();
 
     JLabel wave;
     int waveNumber = 0;
@@ -96,6 +96,8 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
 
     public void actionPerformed(ActionEvent e) {
+        calculateFPS(startTime);
+        startTime = System.currentTimeMillis();
         if(e.getSource() == restart){
             //this = new Survival();
         }
@@ -513,6 +515,10 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             }
         }
 
+    }
+
+    void calculateFPS(long x){
+        System.out.println(1000/(System.currentTimeMillis()-x)+"FPS");
     }
 
 }
