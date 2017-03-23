@@ -122,7 +122,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             // to a regular for loop.    
             enemy en = enemies.get(i);
             if (en.playerTarget != null) {
-                            System.out.println(en.playerTarget == null);
+                            //System.out.println(en.playerTarget == null);
 
                 en.targetPosX = en.playerTarget.xPos;
                 en.targetPosY = en.playerTarget.yPos;
@@ -379,7 +379,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
 
     public void shoot() {
-        bullet b = new bullet(p, 40);
+        bullet b = new bullet(p, 50);
         bullets.add(b);
     }
 

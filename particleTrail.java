@@ -32,6 +32,7 @@ public class particleTrail {
             }
             //particle trail for bullet
         public particleTrail(bullet b) {
+            size = 3;
             xPos = 2.5 + b.xPos - (2.5 * (Math.sin(Math.toRadians(b.rotation))));
             yPos = 2.5 + b.yPos - (2.5 * (-Math.cos(Math.toRadians(b.rotation))));
         }
