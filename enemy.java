@@ -44,7 +44,7 @@ public class enemy {
 	int shotCoolDown = 100; // 1 bullet per second
     int particleCounter = 0;
 	Rectangle bounds = new Rectangle((int)xPos, (int)yPos,30,30);
-
+	double elapsedTime = 0.016;
 	boolean target = true;
 
 	player playerTarget;
@@ -92,7 +92,7 @@ public class enemy {
 
 	public void shoot(){
         bullets.add(new bullet(this, 20));
-        shotCoolDown = 100;
+        shotCoolDown = 160;
 	}
 
 
@@ -105,17 +105,17 @@ public class enemy {
 			desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
 		}
 		if(rotation < desiredRot){
-			rotation += 2;
+			rotation += 2.5;
 		}
 		else if(rotation > desiredRot){
-			rotation -= 2;
+			rotation -= 2.5;
 		}
 	}
 
  public void findVelocityY() {
        
             if (Math.abs(velocityY) < maxVelocity) {
-                velocityY += accelerationY * 0.02;
+                velocityY += accelerationY * elapsedTime;
             } else if (velocityY > 0) {
                 velocityY = maxVelocity - 1;
             } else if (velocityX < 0) {
@@ -125,7 +125,7 @@ public class enemy {
     }
     public void findVelocityX() {
         if (Math.abs(velocityX) < maxVelocity) {
-            velocityX += accelerationX * 0.02;
+            velocityX += accelerationX * elapsedTime;
         } else if (velocityX > 0) {
             velocityX = maxVelocity - 1;
         } else if (velocityX < 0) {
@@ -149,7 +149,7 @@ public class enemy {
 			Rectangle r2 = b.bounds;
 			 if (r2.intersects(bounds)) {
                 //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
-                health -= 10;
+                health -= 25;
                 bullets.remove(b);
             }
 		}
@@ -159,7 +159,7 @@ public void checkCollision(player p){
 			Rectangle r2 = p.bounds;
 			 if (r2.intersects(bounds) && p.boost) {
                 //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
-                health -= 25;
+                health -= 50;
                 p.health -= 25;//p.maxHealth; //remember to take health away from player for colliding (wtihout crashing everything please!)
             }
 		}

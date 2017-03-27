@@ -73,10 +73,15 @@ public class main extends JPanel implements ActionListener {
         }
     }
 
+    void restart(Survival s){
+        s = null;
+        new Survival(this);
+    }
+
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == start) {
-            new Survival();
+            new Survival(this);
             System.out.println("New Survival");
             w.setVisible(false); //what...
             t.stop();

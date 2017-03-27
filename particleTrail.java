@@ -20,7 +20,10 @@ public class particleTrail {
         //particle trail for plane/player
         Rectangle particle;
         Color color;
-
+        Image orange = new ImageIcon(this.getClass().getResource("images/orange.png")).getImage();
+        Image red =  new ImageIcon(this.getClass().getResource("images/red.png")).getImage();
+        Image white = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
+        Image black = new ImageIcon(this.getClass().getResource("images/black.png")).getImage();
         public particleTrail(player p) {
                 //its 10 so it is behind the plane, make it look like it is coming out of the plane.
                 if(p.health >= 0){
@@ -37,20 +40,20 @@ public class particleTrail {
             yPos = 2.5 + b.yPos - (2.5 * (-Math.cos(Math.toRadians(b.rotation))));
         }
         public particleTrail(enemy e) {
-        	    img = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
+        	    img = white;
         	     if((e.health/e.maxHealth)-Math.random() < 0 && (e.health/e.maxHealth)-Math.random() > -0.25){
         	     	size = (int)Math.random()*3+8;
-                	img = new ImageIcon(this.getClass().getResource("images/black.png")).getImage();
+                	img = black;
                 }
                 else if((e.health/e.maxHealth)-Math.random() < -0.25){
                 	double d = Math.random();
                 	if(d > 0.5){
                 		size = 7;
-                	img = new ImageIcon(this.getClass().getResource("images/red.png")).getImage();
+                	img = red;
                 	}
                 	else{
                 		size = 5;
-                		img = new ImageIcon(this.getClass().getResource("images/orange.png")).getImage();
+                		img = orange;
                 	}
                 }
                 xPos = 10 + e.xPos - (15 * (Math.sin(Math.toRadians(e.rotation))));
