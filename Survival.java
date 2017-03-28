@@ -8,12 +8,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.Timer;
+//import javax.swing.Timer;
 import java.lang.Math;
 import java.awt.geom.AffineTransform;
+import java.util.Timer;
 
 
-public class Survival extends JPanel implements KeyListener, ActionListener {
+public class Survival extends JPanel implements KeyListener {
 
     main main;
 
@@ -61,7 +62,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     JLabel comboText;
     int combo = 1;
     double comboCounter = 3.0;
-
+	Timer t = new Timer();
 
     public enum state {
         UP,
@@ -79,8 +80,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         wave = new JLabel("Wave " + waveNumber);
         scoreText = new JLabel("Score: 0");
         comboText = new JLabel("Combo: " + combo);
-        Timer t = new Timer(16, this);
-        t.start();
+        //t.start();
         p.xPos = 640;
         p.yPos = 360;
         setBackground(bgColor);
@@ -94,25 +94,29 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         add(comboText);
         w.setResizable(false);
         w.setVisible(true);
+        loop();
 
     }
 
-
-    public void actionPerformed(ActionEvent e) {
-        //calculateFPS(startTime);
-        //startTime = System.currentTimeMillis();
-        if(e.getSource() == restart){
+public void loop(){
+t.scheduleAtFixedRate(new TimerTask() {
+      public void run() {
+      
+    //public void actionPerformed(ActionEvent e) {
+    	//System.gc();
+        //calculateFPS(startTime+1);
+        /* if(e.getSource() == restart){
             //this = new Survival();
             main.restart(this);
-        }
-    	if(comboCounter <= 0){
+        }*/
+    	if(comboCounter <= 1){
     		combo = 1;
     		comboText.setText("Combo: "+combo);
     	}
     	else{
     	comboCounter -= elapsedTime;
     	}
-        if(enemies.size() == 0){
+        if(enemies.size() == 1){
             wave.setText("Wave " + waveNumber);
             waveNumber += 1;
             int x = ((1280/waveNumber +1));
@@ -217,7 +221,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
             }
 
         }
-
+		
 
         if (p != null) { //if the player is not dead
             //manage Particles
@@ -297,7 +301,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
                 forceY = 0;
             }
             }
-            //System.out.println(p.health);
             if(p.xPos < 0){
                 p.xPos = 1280;
             }
@@ -334,8 +337,9 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         //System.out.println("(X,Y) | Acceleration " + accelerationX + ", " + accelerationY + " 
         //| Velocity " + velocityX + ", " + velocityY + " | Force " + forceX + ", " + forceY);
         //System.out.println(velocityX);
-    }
-
+    //}
+}
+    }, 0, 16);}
     public void makeLosePanel(){
         this.add(youLose);
         this.add(restart);
