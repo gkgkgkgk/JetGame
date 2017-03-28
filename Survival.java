@@ -256,13 +256,13 @@ t.scheduleAtFixedRate(new TimerTask() {
             }
             //image stuff
             if ((Math.abs(p.rotation) > 315) || (Math.abs(p.rotation) < 45) || (Math.abs(p.rotation) > 135 && Math.abs(p.rotation) < 225)) {
-                p.img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
+                p.img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage(); //this is bad practice
                 s = state.UP;
             } else if ((p.rotation <= 135 && p.rotation >= 45) || (p.rotation >= -315 && p.rotation <= -225)) {
-                p.img = new ImageIcon(this.getClass().getResource("images/planeRight.png")).getImage();
+                p.img = new ImageIcon(this.getClass().getResource("images/planeRight.png")).getImage(); //this is bad practice
                 s = state.RIGHT;
             } else {
-                p.img = new ImageIcon(this.getClass().getResource("images/planeLeft.png")).getImage();
+                p.img = new ImageIcon(this.getClass().getResource("images/planeLeft.png")).getImage(); //this is bad practice
                 s = state.LEFT;
             }
             //System.out.println(p.rotation+" degrees");
@@ -465,12 +465,16 @@ t.scheduleAtFixedRate(new TimerTask() {
         //draw trail
         Composite c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
             0.1f);
+
+        ArrayList<bullet> combinedBullets = new ArrayList<bullet>();
+        ArrayList<particleTrail> combinedParticles = new ArrayList<particleTrail>();
+
         if (p != null) {
             for (int i = 0; i < trail.size(); i++) {
                 particleTrail p = trail.get(i);
-                c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    (float)(1f / pCounter));
-                g2d.setComposite(c);
+                //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                //    (float)(1f / pCounter));
+                //g2d.setComposite(c);
                 pCounter -= 1;
                 //g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, 5, 5, j);
                 g2d.setColor(p.color);
@@ -486,14 +490,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                 bullet b = bullets.get(i);
                 g2d.setTransform(old);
                 pCounter = (float)b.trail.size();
-                for (int n = 0; n < b.trail.size(); n++) {
-                    particleTrail part = b.trail.get(n);
-                    c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
-                    g2d.setComposite(c);
-                    pCounter -= 1;
-
-                    g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
-                }
+                combinedParticles.addAll(b.trail);
                 g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
             }
         }
@@ -506,42 +503,35 @@ t.scheduleAtFixedRate(new TimerTask() {
             g2d.drawImage(e.img, 0, 0, e.width, e.height, j);
             pCounter = (float)e.trail.size();
             g2d.setTransform(old);
-            for (int n = 0; n < e.trail.size(); n++) {
-                particleTrail part = e.trail.get(n);
-                c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
-                g2d.setComposite(c);
-                pCounter -= 1;
-                g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
-            }
-            for (int n = 0; n < e.bullets.size(); n++) {
-                bullet b = e.bullets.get(n);
-                pCounter = (float)b.trail.size();
-                for (particleTrail part: b.trail) {
-                    c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
-                    g2d.setComposite(c);
-                    pCounter -= 1;
-                    g2d.drawImage(b.particleImg, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
-                }
-                g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
-            }
+            combinedParticles.addAll(e.trail);
+            
+            combinedBullets.addAll(bullets);
         }
-        g2d.setTransform(old);
-
         for (int o = 0; o < explosions.size(); o++) {
             explosion ex = explosions.get(o);
             for (int z = 0; z < ex.particles.size(); z++) {
                 explosionParticle ep = ex.particles.get(z);
                 g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
                 pCounter = (float)ep.trail.size();
-                for (int i = 0; i < ep.trail.size(); i++) {
-                    particleTrail p = ep.trail.get(i);
-                    //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
-                    //g2d.setComposite(c);
-                    pCounter -= 1;
-                    g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, p.size, p.size, j);
-                }
+                combinedParticles.addAll(ep.trail);
             }
         }
+
+        for (int n = 0; n < combinedBullets.size(); n++) {
+                bullet b = combinedBullets.get(n);
+                pCounter = (float)b.trail.size();
+                combinedParticles.addAll(b.trail);
+                g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
+            }
+        
+        g2d.setTransform(old);
+        for (int n = 0; n < combinedParticles.size(); n++) {
+                particleTrail part = combinedParticles.get(n);
+                //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
+                //g2d.setComposite(c);
+                pCounter -= 1;
+                g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
+            }
 
     }
 
