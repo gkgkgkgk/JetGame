@@ -460,13 +460,14 @@ t.scheduleAtFixedRate(new TimerTask() {
         Graphics2D g2d = (Graphics2D) g; // Create a Java2D version of g.
         //store old rotation
         AffineTransform old = g2d.getTransform();
-        float pCounter = trail.size();
+        float pCounter = (float)trail.size();
         //change transparency
         //draw trail
         Composite c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
             0.1f);
         if (p != null) {
-            for (particleTrail p: trail) {
+            for (int i = 0; i < trail.size(); i++) {
+                particleTrail p = trail.get(i);
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                     (float)(1f / pCounter));
                 g2d.setComposite(c);
@@ -481,10 +482,12 @@ t.scheduleAtFixedRate(new TimerTask() {
             g2d.drawImage(p.img, 0, 0, 30, 30, j);
             //draw bullets
             g2d.setTransform(old);
-            for (bullet b: bullets) {
+            for (int i = 0; i < bullets.size(); i++) {
+                bullet b = bullets.get(i);
                 g2d.setTransform(old);
-                pCounter = b.trail.size();
-                for (particleTrail part: b.trail) {
+                pCounter = (float)b.trail.size();
+                for (int n = 0; n < b.trail.size(); n++) {
+                    particleTrail part = b.trail.get(n);
                     c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                     g2d.setComposite(c);
                     pCounter -= 1;
@@ -495,21 +498,24 @@ t.scheduleAtFixedRate(new TimerTask() {
             }
         }
         //draw enemies
-        for (enemy e: enemies) {
+        for (int i = 0; i < enemies.size(); i++) {
+            enemy e = enemies.get(i);
             //System.out.println("enemies are being drawn");
             g2d.translate(e.xPos, e.yPos); // Translate the center of our coordinates.
             g2d.rotate(Math.toRadians(e.rotation), 15, 15);
             g2d.drawImage(e.img, 0, 0, e.width, e.height, j);
-            pCounter = e.trail.size();
+            pCounter = (float)e.trail.size();
             g2d.setTransform(old);
-            for (particleTrail part: e.trail) {
+            for (int n = 0; n < e.trail.size(); n++) {
+                particleTrail part = e.trail.get(n);
                 c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 g2d.setComposite(c);
                 pCounter -= 1;
                 g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
-            for (bullet b: e.bullets) {
-                pCounter = b.trail.size();
+            for (int n = 0; n < e.bullets.size(); n++) {
+                bullet b = e.bullets.get(n);
+                pCounter = (float)b.trail.size();
                 for (particleTrail part: b.trail) {
                     c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                     g2d.setComposite(c);
@@ -521,13 +527,16 @@ t.scheduleAtFixedRate(new TimerTask() {
         }
         g2d.setTransform(old);
 
-        for (explosion ex: explosions) {
-            for (explosionParticle ep: ex.particles) {
+        for (int o = 0; o < explosions.size(); o++) {
+            explosion ex = explosions.get(o);
+            for (int z = 0; z < ex.particles.size(); z++) {
+                explosionParticle ep = ex.particles.get(z);
                 g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
-                pCounter = ep.trail.size();
-                for (particleTrail p: ep.trail) {
-                    c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
-                    g2d.setComposite(c);
+                pCounter = (float)ep.trail.size();
+                for (int i = 0; i < ep.trail.size(); i++) {
+                    particleTrail p = ep.trail.get(i);
+                    //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
+                    //g2d.setComposite(c);
                     pCounter -= 1;
                     g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, p.size, p.size, j);
                 }
