@@ -116,7 +116,7 @@ t.scheduleAtFixedRate(new TimerTask() {
     	else{
     	comboCounter -= elapsedTime;
     	}
-        if(enemies.size() == 1){
+        if(enemies.size() == 0){
             wave.setText("Wave " + waveNumber);
             waveNumber += 1;
             int x = ((1280/waveNumber +1));

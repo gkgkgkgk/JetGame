@@ -104,11 +104,11 @@ public class enemy {
 			//adding 270 for some rotation reason....  i think
 			desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
 		}
-		if(rotation < desiredRot){
-			rotation += 2.5;
+		if(rotation + (90*Math.random()) < desiredRot){
+			rotation += 5;
 		}
 		else if(rotation > desiredRot){
-			rotation -= 2.5;
+			rotation -= 5;
 		}
 	}
 
