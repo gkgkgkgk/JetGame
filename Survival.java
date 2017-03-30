@@ -66,7 +66,7 @@ public class Survival extends JPanel implements KeyListener {
     JLabel comboText;
     int combo = 1;
     double comboCounter = 3.0;
-	Timer t = new Timer();
+    Timer t = new Timer();
 
     boss1 boss1;
     boolean inBossBattle = false;
@@ -83,11 +83,18 @@ public class Survival extends JPanel implements KeyListener {
 
     Color bgColor = new Color(35, 106, 135);
     double elapsedTime = 0.016;
-        Font font;
+    Font font;
     Font fontBig;
+    Font fontBiggest;
+
     public Survival(main m) {
         getFonts();
+ 
         main = m;
+
+        youLose.setBounds(450,300,1000,100);
+        youLose.setFont(fontBiggest);
+        youLose.setForeground(Color.RED);
         wave = new JLabel("Wave " + waveNumber);
         wave.setBounds(550,50,1000,100);
         wave.setFont(fontBig);
@@ -130,6 +137,11 @@ public void getFonts() {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        try {
+            fontBiggest = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("fonts/mainFont.ttf"))).deriveFont(Font.PLAIN, 72);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 public void loop(){
@@ -137,9 +149,9 @@ t.scheduleAtFixedRate(new TimerTask() {
       public void run() {
     
     if(enemies.size() == 0 && bosses.size() == 0){
+        wave.setText("Wave " + waveNumber);
         //if the wave is over
         waveNumber += 1;
-        wave.setText("Wave " + waveNumber);
         if(waveNumber % 5 != 0){
             int x = ((1280/waveNumber +1));
             for(int i = 0; i < waveNumber-1; i++){
@@ -150,23 +162,15 @@ t.scheduleAtFixedRate(new TimerTask() {
         else{
             bosses.add(new boss1(p));
         }
-
     }
 
-    //public void actionPerformed(ActionEvent e) {
-    	//System.gc();
-        //calculateFPS(startTime+1);
-        /* if(e.getSource() == restart){
-            //this = new Survival();
-            main.restart(this);
-        }*/
-    	if(comboCounter <= 1){
-    		combo = 1;
-    		comboText.setText("Combo: "+combo);
-    	}
-    	else{
-    	comboCounter -= elapsedTime;
-    	}
+        if(comboCounter <= 1){
+            combo = 1;
+            comboText.setText("Combo: "+combo);
+        }
+        else{
+        comboCounter -= elapsedTime;
+        }
 
         if(bosses.size() > 0){
             bosses.get(0).move();
@@ -193,7 +197,10 @@ t.scheduleAtFixedRate(new TimerTask() {
                     bosses.get(0).bullets.remove(b);
                 }
             }
-
+            if(bosses.get(0).health <= 0){
+                score += bosses.get(0).reward;
+                bosses.remove(0);
+            }
         }
 
         //particle trails and bullets for enemies
@@ -209,7 +216,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                 en.checkCollision(bullets); //every enemy should check for a collision with bullets
                 en.checkCollision(p);
                 p.checkCollision(en.bullets); //check player collision with enemy bullets
-                //WHY DOES IT CRASH WHEN THE PLAYER DIES?!?!?!?!?!?!?!?!?!? NVM I FIXED IT
+                //WHY DOES IT CRASH WHEN THE PLAYER DIES?!?!?!?!?!?!?!?!?!? NVM I FIXED IT. Its been fixed.
             } else {
                 en.targetPosX = 640;
                 en.targetPosY = 360;
@@ -292,7 +299,7 @@ t.scheduleAtFixedRate(new TimerTask() {
             }
 
         }
-		
+        
 
         if (p != null) { //if the player is not dead
             //manage Particles
@@ -419,8 +426,8 @@ t.scheduleAtFixedRate(new TimerTask() {
 
 
     public void addScore(int addition){
-    	score += addition;
-    	scoreText.setText("Score: "+score);
+        score += addition;
+        scoreText.setText("Score: "+score);
     }
 
 
@@ -597,6 +604,14 @@ t.scheduleAtFixedRate(new TimerTask() {
             }
         
         g2d.setTransform(old);
+        if(bosses.size() > 0){
+                g2d.drawImage(bosses.get(0).img, (int)bosses.get(0).xPos, (int) bosses.get(0).yPos, bosses.get(0).size, bosses.get(0).size, j);
+                for(int i = 0; i < bosses.get(0).bullets.size(); i++){
+                    bullet b = bosses.get(0).bullets.get(i);
+                    g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
+                    combinedParticles.addAll(b.trail);
+                }
+            }
         for (int n = 0; n < combinedParticles.size(); n++) {
                 particleTrail part = combinedParticles.get(n);
                 //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
@@ -605,13 +620,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                 g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
 
-            if(bosses.size() > 0){
-                g2d.drawImage(bosses.get(0).img, (int)bosses.get(0).xPos, (int) bosses.get(0).yPos, bosses.get(0).size, bosses.get(0).size, j);
-                for(int i = 0; i < bosses.get(0).bullets.size(); i++){
-                    bullet b = bosses.get(0).bullets.get(i);
-                    g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
-                }
-            }
+
 
     }
 

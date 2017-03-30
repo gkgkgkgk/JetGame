@@ -30,6 +30,7 @@ double counter = 0;
 		super.name = "Blimp of Blood (BOB)";
 		super.maxHealth = 500;
 		super.health = 500;
+		this.reward = 1000;
 	}
 
 	public void move(){
@@ -42,12 +43,12 @@ double counter = 0;
 		else{xPos -= 1; if(xPos <=180){right = true; super.img = rightImage;}}
 		break;
 		case 2:
-		if(right){xPos += 2; if(xPos >= 1100){right = false; super.img = left;}}
-		else{xPos -= 2; if(xPos <=180){right = true; super.img = rightImage;}}
+		if(right){xPos += 1.5; if(xPos >= 1100){right = false; super.img = left;}}
+		else{xPos -= 1.5; if(xPos <=180){right = true; super.img = rightImage;}}
 		break;
 		case 3:
-		if(right){xPos += 1; if(xPos >= 1100){right = false; super.img = left;}}
-		else{xPos -= 1; if(xPos <=180){right = true; super.img = rightImage;}}
+		if(right){xPos += 2; if(xPos >= 1100){right = false; super.img = left;}}
+		else{xPos -= 2; if(xPos <=180){right = true; super.img = rightImage;}}
 		break;
 	}
 	shotCooldown -= 1;
@@ -82,7 +83,7 @@ double counter = 0;
 		}
 		break;
 		case 2:
-		bullets.add(new bullet(this, 20, xPos+(20*turret), yPos+75));
+		bullets.add(new bullet(this, 30, xPos+(20*turret), yPos+75));
 		if(turret < 6){
 			turret += 1;
 		}
@@ -92,6 +93,10 @@ double counter = 0;
 		shotCooldown = 20;
 		break;
 		case 3:
+		for(int i = 1; i < 6; i++){
+		bullets.add(new bullet(this, 40, xPos+(20*i), yPos+75));
+		}
+		shotCooldown = 10;
 		break;
 	}
 	}
@@ -119,18 +124,20 @@ public void checkCollision(player p){
 
 	public void lerpRotation(){
 		if(targetPosX >= xPos){
-		super.desiredRot = 90 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));
+			//remember to use xPos+(20*turret), yPos+75
+		super.desiredRot = 90 + Math.toDegrees(Math.atan((targetPosY - yPos+75) / (targetPosX - xPos+(20*turret))));
 		}
 		else{
 			//adding 270 for some rotation reason....  i think
-			super.desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
+			super.desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - yPos+75) / (targetPosX - xPos+(20*turret))));	
 		}
 		if(rotation + (90*Math.random()) < super.desiredRot){
-			super.rotation += 5;
+			super.rotation += 3;
 		}
 		else if(super.rotation > super.desiredRot){
-			super.rotation -= 5;
+			super.rotation -= 3;
 		}
+		super.rotation = desiredRot;
 	}
 
 }
