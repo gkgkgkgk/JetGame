@@ -42,6 +42,14 @@ public class bullet {
             yRot = -Math.cos(Math.toRadians(p.rotation));
             xRot = Math.sin(Math.toRadians(p.rotation));
         }
+        public bullet(boss b, double speed, double posX, double posY){
+            this.speed = speed;
+            xPos = posX;
+            yPos = posY;
+
+            yRot = -Math.cos(Math.toRadians(b.rotation));
+            xRot = Math.sin(Math.toRadians(b.rotation));
+        }
 
 
     }

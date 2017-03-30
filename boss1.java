@@ -17,27 +17,83 @@ import java.awt.geom.AffineTransform;
 public class boss1 extends boss{
 
 boolean right = true;
+Image rightImage = new ImageIcon(this.getClass().getResource("images/boss1.png")).getImage();
+Image left = new ImageIcon(this.getClass().getResource("images/boss1Left.png")).getImage();
+int turret = 1;
+double shotCooldown = 50;
+double counter = 0;
 
-
-	public boss1(){
+	public boss1(player p){
 		super.size = 150;
+		super.img = rightImage;
+		super.playerTarget = p;
+		super.name = "Blimp of Blood (BOB)";
+		super.maxHealth = 500;
+		super.health = 500;
 	}
 
 	public void move(){
+		targetPosX = playerTarget.xPos;
+		targetPosY = playerTarget.yPos;
+		lerpRotation();
 		switch(phase){
 		case 1:
-		if(right){xPos += 1; if(xPos >= 1100){right = false;}}
-		else{xPos -= 1; if(xPos <=180){right = true;}}
+		if(right){xPos += 1; if(xPos >= 1100){right = false; super.img = left;}}
+		else{xPos -= 1; if(xPos <=180){right = true; super.img = rightImage;}}
 		break;
 		case 2:
+		if(right){xPos += 2; if(xPos >= 1100){right = false; super.img = left;}}
+		else{xPos -= 2; if(xPos <=180){right = true; super.img = rightImage;}}
 		break;
 		case 3:
+		if(right){xPos += 1; if(xPos >= 1100){right = false; super.img = left;}}
+		else{xPos -= 1; if(xPos <=180){right = true; super.img = rightImage;}}
 		break;
+	}
+	shotCooldown -= 1;
+	if(shotCooldown <= 0){
+		shoot();
+	}
+	if(health < 350){
+		phase = 2;
+	}
+	if(health < 200){
+		phase = 3;
 	}
 	}
 
 	public void shoot(){
-
+		switch(phase){
+		case 1:
+		if(counter < 5){
+			bullets.add(new bullet(this, 20, xPos+(20*turret), yPos+75));
+			shotCooldown = 10;
+			counter += 1;
+		}
+		else{
+			if(turret < 6){
+			turret += 1;
+		}
+		else{
+			turret = 1;
+		}
+			shotCooldown = 100;
+			counter = 0;
+		}
+		break;
+		case 2:
+		bullets.add(new bullet(this, 20, xPos+(20*turret), yPos+75));
+		if(turret < 6){
+			turret += 1;
+		}
+		else{
+			turret = 1;
+		}
+		shotCooldown = 20;
+		break;
+		case 3:
+		break;
+	}
 	}
 
 	public void checkCollision(ArrayList<bullet> bullets){
@@ -45,7 +101,7 @@ boolean right = true;
 			bullet b = bullets.get(i);
 			Rectangle r2 = b.bounds;
 			 if (r2.intersects(bounds)) {
-                //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
+                System.out.println("Boss Collision with bullet at " + xPos+", "+yPos +" " +health);
                 health -= 25;
                 bullets.remove(b);
             }
@@ -55,10 +111,26 @@ boolean right = true;
 public void checkCollision(player p){
 			Rectangle r2 = p.bounds;
 			 if (r2.intersects(bounds) && p.boost) {
-                //System.out.println("Enemy Collision with bullet at" + xPos+", "+yPos);
+                System.out.println("Boss Collision with bullet at" + xPos+", "+yPos);
                 health -= 50;
-                p.health -= 25;//p.maxHealth; //remember to take health away from player for colliding (wtihout crashing everything please!)
+                p.health -= 50;//p.maxHealth; //remember to take health away from player for colliding (wtihout crashing everything please!)
             }
 		}
+
+	public void lerpRotation(){
+		if(targetPosX >= xPos){
+		super.desiredRot = 90 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));
+		}
+		else{
+			//adding 270 for some rotation reason....  i think
+			super.desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - this.yPos) / (targetPosX - this.xPos)));	
+		}
+		if(rotation + (90*Math.random()) < super.desiredRot){
+			super.rotation += 5;
+		}
+		else if(super.rotation > super.desiredRot){
+			super.rotation -= 5;
+		}
+	}
 
 }

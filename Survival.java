@@ -12,7 +12,10 @@ import java.awt.event.ActionEvent;
 import java.lang.Math;
 import java.awt.geom.AffineTransform;
 import java.util.Timer;
-
+import java.awt.FontMetrics;
+import java.awt.Font;
+import java.io.*;
+import java.io.InputStream;
 
 public class Survival extends JPanel implements KeyListener {
 
@@ -20,7 +23,7 @@ public class Survival extends JPanel implements KeyListener {
 
     saveToXML save = new saveToXML();
     //you lose! stuff
-    JLabel youLose = new JLabel("You Lose!");
+    JLabel youLose = new JLabel("YOU DIED");
     JButton restart = new JButton("Restart!");
 
 
@@ -80,13 +83,23 @@ public class Survival extends JPanel implements KeyListener {
 
     Color bgColor = new Color(35, 106, 135);
     double elapsedTime = 0.016;
-
+        Font font;
+    Font fontBig;
     public Survival(main m) {
+        getFonts();
         main = m;
         wave = new JLabel("Wave " + waveNumber);
+        wave.setBounds(550,50,1000,100);
+        wave.setFont(fontBig);
+        wave.setForeground(Color.BLACK);
         scoreText = new JLabel("Score: 0");
+        scoreText.setBounds(10,-20,1000,100);
+        scoreText.setFont(fontBig);
+        scoreText.setForeground(Color.BLACK);
         comboText = new JLabel("Combo: " + combo);
-        //t.start();
+        comboText.setBounds(10,30,1000,100);
+        comboText.setFont(fontBig);
+        comboText.setForeground(Color.BLACK);
         p.xPos = 640;
         p.yPos = 360;
         setBackground(bgColor);
@@ -95,6 +108,7 @@ public class Survival extends JPanel implements KeyListener {
         w.setContentPane(this);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         w.addKeyListener(this);
+        setLayout(null);
         add(wave);
         add(scoreText);
         add(comboText);
@@ -102,6 +116,20 @@ public class Survival extends JPanel implements KeyListener {
         w.setVisible(true);
         loop();
 
+    }
+
+
+public void getFonts() {
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("fonts/mainFont.ttf"))).deriveFont(Font.PLAIN, 24);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+         try {
+            fontBig = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("fonts/mainFont.ttf"))).deriveFont(Font.PLAIN, 48);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 public void loop(){
@@ -120,7 +148,7 @@ t.scheduleAtFixedRate(new TimerTask() {
             }
         }
         else{
-            bosses.add(new boss1());
+            bosses.add(new boss1(p));
         }
 
     }
@@ -142,6 +170,30 @@ t.scheduleAtFixedRate(new TimerTask() {
 
         if(bosses.size() > 0){
             bosses.get(0).move();
+            bosses.get(0).checkCollision(bullets);
+            if(p != null){
+            bosses.get(0).checkCollision(p);
+            p.checkCollision(bosses.get(0).bullets);
+            }
+            bosses.get(0).bounds = new Rectangle((int) bosses.get(0).xPos, (int) bosses.get(0).yPos, bosses.get(0).size, bosses.get(0).size);
+            for (int f = 0; f < bosses.get(0).bullets.size(); f++) {
+                bullet b = bosses.get(0).bullets.get(f);
+                if (b.particleCounter <= 10) {
+                    b.particleCounter += 1;
+                    b.trail.add(new particleTrail(b));
+                } else {
+                    b.trail.remove(0);
+                    b.particleCounter -= 1;
+                }
+                b.xPos += b.speed * b.xRot;
+                b.yPos += b.speed * b.yRot;
+                b.bounds = new Rectangle((int) b.xPos, (int) b.yPos, 5, 5);
+                //remove stray bullets
+                if(b.xPos < -50 || b.xPos > 1330 || b.yPos < -50 || b.yPos > 770){
+                    bosses.get(0).bullets.remove(b);
+                }
+            }
+
         }
 
         //particle trails and bullets for enemies
@@ -351,6 +403,7 @@ t.scheduleAtFixedRate(new TimerTask() {
             }
 
         }
+
         time++;
         repaint();
         //System.out.println("(X,Y) | Acceleration " + accelerationX + ", " + accelerationY + " 
@@ -554,6 +607,10 @@ t.scheduleAtFixedRate(new TimerTask() {
 
             if(bosses.size() > 0){
                 g2d.drawImage(bosses.get(0).img, (int)bosses.get(0).xPos, (int) bosses.get(0).yPos, bosses.get(0).size, bosses.get(0).size, j);
+                for(int i = 0; i < bosses.get(0).bullets.size(); i++){
+                    bullet b = bosses.get(0).bullets.get(i);
+                    g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
+                }
             }
 
     }

@@ -28,7 +28,7 @@ public class boss{
 	double targetPosY;
 	double gravity = 9.87;
 	ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
-	Image img = new ImageIcon(this.getClass().getResource("images/boss1.png")).getImage();	
+	Image img;
 	Image particleImg = new ImageIcon(this.getClass().getResource("images/player.png")).getImage();
 	ArrayList < bullet > bullets = new ArrayList < bullet > ();
 	int shotCoolDown = 50; // 1 bullet per second
@@ -38,10 +38,11 @@ public class boss{
 	boolean target = true;
 	int size = 30;
 	public int phase = 1; //3 phases of the boss
-
-
+	double rotation = 0;
+	double desiredRot;
 	player playerTarget;
 	int reward = 1000;
+	String name;
 
 	public boss(){
 
@@ -49,5 +50,12 @@ public class boss{
 
 	public void move(){
 	}
+
+	public void lerpRotation(){}
+
+
+	public void checkCollision(ArrayList<bullet> bullets){}
+	public void checkCollision(player p){}
+
 
 }
