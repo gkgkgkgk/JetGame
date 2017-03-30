@@ -50,6 +50,7 @@ public class Survival extends JPanel implements KeyListener {
     ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
     ArrayList < enemy > enemies = new ArrayList < enemy > ();
     ArrayList < explosion > explosions = new ArrayList < explosion > ();
+    ArrayList < boss > bosses = new ArrayList < boss > ();
     int particleCounter = 0;
     boolean boost = false;
     long startTime = System.currentTimeMillis();
@@ -63,6 +64,11 @@ public class Survival extends JPanel implements KeyListener {
     int combo = 1;
     double comboCounter = 3.0;
 	Timer t = new Timer();
+
+    boss1 boss1;
+    boolean inBossBattle = false;
+
+
 
     public enum state {
         UP,
@@ -101,7 +107,24 @@ public class Survival extends JPanel implements KeyListener {
 public void loop(){
 t.scheduleAtFixedRate(new TimerTask() {
       public void run() {
-      
+    
+    if(enemies.size() == 0 && bosses.size() == 0){
+        //if the wave is over
+        waveNumber += 1;
+        wave.setText("Wave " + waveNumber);
+        if(waveNumber % 5 != 0){
+            int x = ((1280/waveNumber +1));
+            for(int i = 0; i < waveNumber-1; i++){
+                enemies.add(new enemy(x, 0, p, 100));
+                 x += (1280/waveNumber +1);
+            }
+        }
+        else{
+            bosses.add(new boss1());
+        }
+
+    }
+
     //public void actionPerformed(ActionEvent e) {
     	//System.gc();
         //calculateFPS(startTime+1);
@@ -116,15 +139,11 @@ t.scheduleAtFixedRate(new TimerTask() {
     	else{
     	comboCounter -= elapsedTime;
     	}
-        if(enemies.size() == 0){
-            wave.setText("Wave " + waveNumber);
-            waveNumber += 1;
-            int x = ((1280/waveNumber +1));
-            for(int i = 0; i < waveNumber-1; i++){
-                enemies.add(new enemy(x, 0, p, 100));
-                 x += (1280/waveNumber +1);
-            }
+
+        if(bosses.size() > 0){
+            bosses.get(0).move();
         }
+
         //particle trails and bullets for enemies
         for (int i = 0; i < enemies.size(); i++) {
             // needed to switch to a regular for loop because the foreach loop 
@@ -468,6 +487,7 @@ t.scheduleAtFixedRate(new TimerTask() {
 
         ArrayList<bullet> combinedBullets = new ArrayList<bullet>();
         ArrayList<particleTrail> combinedParticles = new ArrayList<particleTrail>();
+        ArrayList<explosionParticle> combinedEParticles = new ArrayList<explosionParticle>();
 
         if (p != null) {
             for (int i = 0; i < trail.size(); i++) {
@@ -504,19 +524,18 @@ t.scheduleAtFixedRate(new TimerTask() {
             pCounter = (float)e.trail.size();
             g2d.setTransform(old);
             combinedParticles.addAll(e.trail);
-            
-            combinedBullets.addAll(bullets);
+            combinedBullets.addAll(e.bullets);
         }
         for (int o = 0; o < explosions.size(); o++) {
             explosion ex = explosions.get(o);
-            for (int z = 0; z < ex.particles.size(); z++) {
-                explosionParticle ep = ex.particles.get(z);
-                g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
-                pCounter = (float)ep.trail.size();
-                combinedParticles.addAll(ep.trail);
-            }
+            combinedEParticles.addAll(ex.particles);
+            
         }
-
+        for (int z = 0; z < combinedEParticles.size(); z++) {
+                explosionParticle ep = combinedEParticles.get(z);
+                g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
+                combinedParticles.addAll(ep.trail);
+        }
         for (int n = 0; n < combinedBullets.size(); n++) {
                 bullet b = combinedBullets.get(n);
                 pCounter = (float)b.trail.size();
@@ -531,6 +550,10 @@ t.scheduleAtFixedRate(new TimerTask() {
                 //g2d.setComposite(c);
                 pCounter -= 1;
                 g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
+            }
+
+            if(bosses.size() > 0){
+                g2d.drawImage(bosses.get(0).img, (int)bosses.get(0).xPos, (int) bosses.get(0).yPos, bosses.get(0).size, bosses.get(0).size, j);
             }
 
     }
