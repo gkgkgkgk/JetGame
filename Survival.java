@@ -441,7 +441,12 @@ t.scheduleAtFixedRate(new TimerTask() {
                 velocityY = (-maxVelocity) + 1;
             }
         } else {
+            if(Math.abs(velocityY) < maxVelocity){
             velocityY += accelerationY * elapsedTime;
+            }
+            else{
+                velocityY = maxVelocity;
+            }
         }
     }
     public void findVelocityX() {

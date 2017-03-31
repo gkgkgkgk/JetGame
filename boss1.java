@@ -123,19 +123,13 @@ public void checkCollision(player p){
 		}
 
 	public void lerpRotation(){
-		if(targetPosX >= xPos){
+		if(targetPosX >= xPos+(20*turret)){
 			//remember to use xPos+(20*turret), yPos+75
 		super.desiredRot = 90 + Math.toDegrees(Math.atan((targetPosY - yPos+75) / (targetPosX - xPos+(20*turret))));
 		}
 		else{
 			//adding 270 for some rotation reason....  i think
 			super.desiredRot = 270 + Math.toDegrees(Math.atan((targetPosY - yPos+75) / (targetPosX - xPos+(20*turret))));	
-		}
-		if(rotation + (90*Math.random()) < super.desiredRot){
-			super.rotation += 3;
-		}
-		else if(super.rotation > super.desiredRot){
-			super.rotation -= 3;
 		}
 		super.rotation = desiredRot;
 	}
