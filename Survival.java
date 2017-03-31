@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-//import javax.swing.Timer;
 import java.lang.Math;
 import java.awt.geom.AffineTransform;
 import java.util.Timer;
@@ -23,7 +22,7 @@ public class Survival extends JPanel implements KeyListener {
 
     saveToXML save = new saveToXML();
     //you lose! stuff
-    JLabel youLose = new JLabel("YOU DIED");
+    JLabel youLose = new JLabel("YOU  DIED");
     JButton restart = new JButton("Restart!");
 
 
@@ -71,15 +70,17 @@ public class Survival extends JPanel implements KeyListener {
     boss1 boss1;
     boolean inBossBattle = false;
 
+    Rectangle healthBarBack = new Rectangle(240,600,800,30); //x y size
+    Rectangle healthBarRed = new Rectangle(250,605,780,20); //x y size
+    Rectangle healthBarGreen = new Rectangle(250,605,780,20); //x y size
 
-
-    public enum state {
+    enum state {
         UP,
         DOWN,
         RIGHT,
         LEFT
     };
-    public state s;
+    state s;
 
     Color bgColor = new Color(35, 106, 135);
     double elapsedTime = 0.016;
@@ -197,10 +198,13 @@ t.scheduleAtFixedRate(new TimerTask() {
                     bosses.get(0).bullets.remove(b);
                 }
             }
+            healthBarGreen.width = (int)((780/500) * bosses.get(0).health);     //  780/x = 500/health
+            
             if(bosses.get(0).health <= 0){
                 score += bosses.get(0).reward;
                 bosses.remove(0);
             }
+
         }
 
         //particle trails and bullets for enemies
@@ -616,6 +620,13 @@ t.scheduleAtFixedRate(new TimerTask() {
                     g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
                     combinedParticles.addAll(b.trail);
                 }
+                    g2d.setColor(Color.BLACK);
+                    g2d.fillRect((int)healthBarBack.getX(), (int)healthBarBack.getY(), (int)healthBarBack.getWidth(), (int)healthBarBack.getHeight());
+                    g2d.setColor(Color.RED);
+                    g2d.fillRect((int)healthBarRed.getX(), (int)healthBarRed.getY(), (int)healthBarRed.getWidth(), (int)healthBarRed.getHeight());
+                    g2d.setColor(Color.GREEN);
+                    g2d.fillRect((int)healthBarGreen.getX(), (int)healthBarGreen.getY(), (int)healthBarGreen.getWidth(), (int)healthBarGreen.getHeight());
+
             }
         for (int n = 0; n < combinedParticles.size(); n++) {
                 particleTrail part = combinedParticles.get(n);
@@ -624,9 +635,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                 pCounter -= 1;
                 g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
-
-
-
+        
     }
 
     void calculateFPS(long x){
