@@ -22,7 +22,6 @@ public class main extends JPanel implements ActionListener {
     JButton start;
     Font font;
     Font fontBig;
-
     int time = 0;
     Timer t;
     JLabel title;
@@ -56,7 +55,6 @@ public class main extends JPanel implements ActionListener {
         add(start);
         add(title);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
     }
 
 

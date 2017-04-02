@@ -16,7 +16,7 @@ import java.awt.Font;
 import java.io.*;
 import java.io.InputStream;
 
-public class Survival extends JPanel implements KeyListener {
+public class Survival extends JPanel implements KeyListener, ActionListener {
 
     main main;
 
@@ -26,6 +26,10 @@ public class Survival extends JPanel implements KeyListener {
     JButton restart = new JButton("Restart!");
 
 
+    JButton startNextRound = new JButton("Continue");
+
+
+    int refreshRate = 16;
     int time = 0;
     JFrame w;
     double gravity = 9.87;
@@ -88,11 +92,18 @@ public class Survival extends JPanel implements KeyListener {
     Font fontBig;
     Font fontBiggest;
 
+
+    SoundEffect pew = SoundEffect.HIT;
+    SoundEffect explosion = SoundEffect.EXPLODE;
+
     public Survival(main m) {
         getFonts();
  
         main = m;
 
+        startNextRound.setBounds(390, 300, 300, 100);
+        startNextRound.addActionListener(this);
+        startNextRound.setFocusable(false);
         youLose.setBounds(450,300,1000,100);
         youLose.setFont(fontBiggest);
         youLose.setForeground(Color.RED);
@@ -144,6 +155,13 @@ public void getFonts() {
             ex.printStackTrace();
         }
     }
+
+
+public void actionPerformed(ActionEvent e){
+	if(e.getSource() == startNextRound){
+		resume();
+	}
+}
 
 public void loop(){
 t.scheduleAtFixedRate(new TimerTask() {
@@ -198,10 +216,12 @@ t.scheduleAtFixedRate(new TimerTask() {
                     bosses.get(0).bullets.remove(b);
                 }
             }
-            healthBarGreen.width = (int)((780/500) * bosses.get(0).health);     //  780/x = 500/health
+            healthBarGreen.width = (int)(((780* bosses.get(0).health)/500) );     //  780/x = 500/health
             
             if(bosses.get(0).health <= 0){
                 score += bosses.get(0).reward;
+                explosions.add(new explosion(100, (int) bosses.get(0).xPos, (int) bosses.get(0).yPos));
+                afterBoss();
                 bosses.remove(0);
             }
 
@@ -273,6 +293,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                 combo +=1;
                 comboText.setText("Combo: "+combo);
                 enemies.remove(en);
+                explosion.play(false);
             }
         }
         //explosion stuff
@@ -422,7 +443,20 @@ t.scheduleAtFixedRate(new TimerTask() {
         //System.out.println(velocityX);
     //}
 }
-    }, 0, 16);}
+    }, 0, refreshRate);}
+
+
+	void afterBoss(){
+		p.health = p.maxHealth;
+		t.cancel();
+		this.add(startNextRound);
+
+	}
+	void resume(){
+		t = new Timer();
+		this.remove(startNextRound);
+		loop();
+	}
     public void makeLosePanel(){
         this.add(youLose);
         this.add(restart);
@@ -490,6 +524,7 @@ t.scheduleAtFixedRate(new TimerTask() {
     public void shoot() {
         bullet b = new bullet(p, 50);
         bullets.add(b);
+        pew.play(false);
     }
 
 
