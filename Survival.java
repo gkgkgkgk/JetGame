@@ -24,7 +24,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     //you lose! stuff
     JLabel youLose = new JLabel("YOU  DIED");
     JButton restart = new JButton("Restart!");
-
+    JLabel highScore = new JLabel("High Score:");
 
     JButton startNextRound = new JButton("Continue");
 
@@ -57,6 +57,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     ArrayList < enemy > enemies = new ArrayList < enemy > ();
     ArrayList < explosion > explosions = new ArrayList < explosion > ();
     ArrayList < boss > bosses = new ArrayList < boss > ();
+    ArrayList < cloud > clouds = new ArrayList < cloud > ();
     int particleCounter = 0;
     boolean boost = false;
     long startTime = System.currentTimeMillis();
@@ -87,20 +88,25 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     };
     state s;
 
-    Color bgColor = new Color(35, 106, 135);
+    Color bgColor = new Color(108,164,200);
     double elapsedTime = 0.016;
     Font font;
     Font fontBig;
     Font fontBiggest;
 
+    double cloudAmount;
 
     SoundEffect pew = SoundEffect.HIT;
     SoundEffect explosion = SoundEffect.EXPLODE;
 
     public Survival(main m) {
         getFonts();
- 
+ 	
         main = m;
+
+        cloudAmount = Math.random()*125; //random amount of clouds
+        highScore.setBounds(450, 450, 1000,100);
+        highScore.setFont(fontBig);
 
         bossName.setFont(font);
         bossName.setBounds(250, 525, 1000,100);
@@ -173,6 +179,19 @@ public void loop(){
 t.scheduleAtFixedRate(new TimerTask() {
       public void run() {
     
+
+    if(clouds.size() < cloudAmount){
+    	clouds.add(new cloud(10+Math.random()*90, (int)(4*Math.random())));
+    }
+    else{
+    	for(int i = 0; i < clouds.size(); i++){
+    		clouds.get(i).move();
+    		if(clouds.get(i).xPos > 1300){
+    			clouds.remove(clouds.get(i));
+    		}
+    	}
+    }
+
     if(enemies.size() == 0 && bosses.size() == 0){
         wave.setText("Wave " + waveNumber);
         //if the wave is over
@@ -208,7 +227,7 @@ t.scheduleAtFixedRate(new TimerTask() {
             bosses.get(0).bounds = new Rectangle((int) bosses.get(0).xPos, (int) bosses.get(0).yPos, bosses.get(0).size, bosses.get(0).size);
             for (int f = 0; f < bosses.get(0).bullets.size(); f++) {
                 bullet b = bosses.get(0).bullets.get(f);
-                if (b.particleCounter <= 10) {
+                if (b.particleCounter <= 5) {
                     b.particleCounter += 1;
                     b.trail.add(new particleTrail(b));
                 } else {
@@ -267,7 +286,7 @@ t.scheduleAtFixedRate(new TimerTask() {
             //bullet particles/trails
             for (int f = 0; f < en.bullets.size(); f++) {
                 bullet b = en.bullets.get(f);
-                if (b.particleCounter <= 10) {
+                if (b.particleCounter <= 5) {
                     b.particleCounter += 1;
                     b.trail.add(new particleTrail(b));
                 } else {
@@ -315,7 +334,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                         ep.posY -= ep.speed * Math.cos(Math.toRadians(ep.rotation));
                         ep.lifeTime -= elapsedTime;
                         if (ep.trailBool) {
-                            if (ep.particleCounter <= 10) {
+                            if (ep.particleCounter <= 5) {
                                 ep.particleCounter += 1;
                                 ep.trail.add(new particleTrail(ep));
                             } else {
@@ -468,6 +487,8 @@ t.scheduleAtFixedRate(new TimerTask() {
     public void makeLosePanel(){
         this.add(youLose);
         this.add(restart);
+        highScore.setText("High Score: " + save.getHighScoreSurvival());
+        this.add(highScore);
     }
 
 
@@ -610,11 +631,20 @@ t.scheduleAtFixedRate(new TimerTask() {
         ArrayList<particleTrail> combinedParticles = new ArrayList<particleTrail>();
         ArrayList<explosionParticle> combinedEParticles = new ArrayList<explosionParticle>();
 
+        for(int i = 0; i < clouds.size(); i ++){
+        	c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / (100/clouds.get(i).size)));
+             g2d.setComposite(c);
+        	g2d.drawImage(clouds.get(i).image, (int)clouds.get(i).xPos, (int)clouds.get(i).yPos, (int)clouds.get(i).size, (int)clouds.get(i).size,j);
+        }
+
+        //reset the opacity of everything
+        c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
+        g2d.setComposite(c);
+
         if (p != null) {
             for (int i = 0; i < trail.size(); i++) {
                 particleTrail p = trail.get(i);
-                //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                //    (float)(1f / pCounter));
+                //c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / pCounter));
                 //g2d.setComposite(c);
                 pCounter -= 1;
                 //g2d.drawImage(p.img, (int) p.xPos, (int) p.yPos, 5, 5, j);
@@ -649,8 +679,7 @@ t.scheduleAtFixedRate(new TimerTask() {
         }
         for (int o = 0; o < explosions.size(); o++) {
             explosion ex = explosions.get(o);
-            combinedEParticles.addAll(ex.particles);
-            
+            combinedEParticles.addAll(ex.particles);         
         }
         for (int z = 0; z < combinedEParticles.size(); z++) {
                 explosionParticle ep = combinedEParticles.get(z);
