@@ -77,6 +77,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
     Rectangle healthBarBack = new Rectangle(240,600,800,30); //x y size
     Rectangle healthBarRed = new Rectangle(250,605,780,20); //x y size
     Rectangle healthBarGreen = new Rectangle(250,605,780,20); //x y size
+    JLabel bossName = new JLabel("");
 
     enum state {
         UP,
@@ -101,7 +102,11 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
  
         main = m;
 
-        startNextRound.setBounds(390, 300, 300, 100);
+        bossName.setFont(font);
+        bossName.setBounds(250, 525, 1000,100);
+        bossName.setForeground(Color.BLACK);
+
+        startNextRound.setBounds(490, 300, 300, 100);
         startNextRound.addActionListener(this);
         startNextRound.setFocusable(false);
         youLose.setBounds(450,300,1000,100);
@@ -131,6 +136,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         add(wave);
         add(scoreText);
         add(comboText);
+        add(bossName);
         w.setResizable(false);
         w.setVisible(true);
         loop();
@@ -180,6 +186,7 @@ t.scheduleAtFixedRate(new TimerTask() {
         }
         else{
             bosses.add(new boss1(p));
+            bossName.setText(bosses.get(0).name);
         }
     }
 
@@ -222,6 +229,7 @@ t.scheduleAtFixedRate(new TimerTask() {
                 score += bosses.get(0).reward;
                 explosions.add(new explosion(100, (int) bosses.get(0).xPos, (int) bosses.get(0).yPos));
                 afterBoss();
+                bossName.setText("");
                 bosses.remove(0);
             }
 
@@ -482,7 +490,10 @@ t.scheduleAtFixedRate(new TimerTask() {
             if(Math.abs(velocityY) < maxVelocity){
             velocityY += accelerationY * elapsedTime;
             }
-            else{
+            else if(velocityY < 0){
+                velocityY = -maxVelocity;
+            }
+            else if(velocityY >= 0){
                 velocityY = maxVelocity;
             }
         }
@@ -497,9 +508,15 @@ t.scheduleAtFixedRate(new TimerTask() {
                 velocityX = (-maxVelocity) + 1;
             }
         } else {
-            if (velocityX == 0) {
-
-            } else if (velocityX > 0) {
+        	if(maxVelocity < Math.abs(velocityX)){
+        		if(velocityX < 0){
+                velocityX = -maxVelocity;
+            }
+            else if(velocityX >= 0){
+                velocityX = maxVelocity;
+            }
+        	}
+			if (velocityX >= 0) {
                 velocityX -= mass * elapsedTime;
             } else if (velocityX < 0) {
                 velocityX += mass * elapsedTime;

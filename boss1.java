@@ -92,6 +92,7 @@ double counter = 0;
 		shotCooldown = 20;
 		break;
 		case 3:
+		turret = 3;
 		for(int i = 1; i < 6; i++){
 		bullets.add(new bullet(this, 40, xPos+(20*i), yPos+75));
 		}
