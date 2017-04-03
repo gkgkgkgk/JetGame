@@ -28,7 +28,6 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
 
     JButton startNextRound = new JButton("Continue");
 
-
     int refreshRate = 16;
     int time = 0;
     JFrame w;
@@ -103,6 +102,12 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         getFonts();
  	
         main = m;
+
+        restart.setFont(fontBig);
+        restart.setBounds(490, 10, 300, 100);
+        restart.setFocusable(false);
+        restart.addActionListener(this);
+
 
         cloudAmount = Math.random()*125; //random amount of clouds
         highScore.setBounds(450, 450, 1000,100);
@@ -490,6 +495,7 @@ t.scheduleAtFixedRate(new TimerTask() {
         this.add(restart);
         highScore.setText("High Score: " + save.getHighScoreSurvival());
         this.add(highScore);
+        this.add(restart);
     }
 
 
