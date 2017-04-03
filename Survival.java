@@ -146,6 +146,7 @@ public class Survival extends JPanel implements KeyListener, ActionListener {
         w.setResizable(false);
         w.setVisible(true);
         loop();
+        System.setProperty("sun.java2d.opengl", "true");
 
     }
 
