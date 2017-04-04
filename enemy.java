@@ -43,7 +43,7 @@ public class enemy {
 	ArrayList < bullet > bullets = new ArrayList < bullet > ();
 	int shotCoolDown = 100; // 1 bullet per second
     int particleCounter = 0;
-	Rectangle bounds = new Rectangle((int)xPos, (int)yPos,30,30);
+	Rectangle bounds = new Rectangle((int)xPos, (int)yPos, 30, 30);
 	double elapsedTime = 0.016;
 	boolean target = true;
 
@@ -71,6 +71,10 @@ public class enemy {
 		this.xPos = x;
 	}
 	
+	public enemy(){
+
+	}
+
 	public void move(){	
         findVelocityY();
         findAccelerationX();

@@ -184,8 +184,6 @@ public void actionPerformed(ActionEvent e){
 public void loop(){
 t.scheduleAtFixedRate(new TimerTask() {
       public void run() {
-    
-
     if(clouds.size() < cloudAmount){
     	clouds.add(new cloud(10+Math.random()*90, (int)(4*Math.random())));
     }
