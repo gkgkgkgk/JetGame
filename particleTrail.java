@@ -33,6 +33,15 @@ public class particleTrail {
                 xPos = 10 + p.xPos - (15 * (Math.sin(Math.toRadians(p.rotation))));
                 yPos = 10 + p.yPos - (15 * (-Math.cos(Math.toRadians(p.rotation))));
             }
+            public particleTrail(multiplayer p) {
+                //its 10 so it is behind the plane, make it look like it is coming out of the plane.
+                if(p.health >= 0){
+                color = new Color(255,(int)((p.health/p.maxHealth)*255),(int)((p.health/p.maxHealth)*255),255) ;
+            	}
+            	else{color = Color.RED;}
+                xPos = 10 + p.xPos - (15 * (Math.sin(Math.toRadians(p.rotation))));
+                yPos = 10 + p.yPos - (15 * (-Math.cos(Math.toRadians(p.rotation))));
+            }
             //particle trail for bullet
         public particleTrail(bullet b) {
             size = 3;

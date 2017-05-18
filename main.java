@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class main extends JPanel implements ActionListener {
 
     JFrame w = new JFrame();
-    JButton start;
+    JButton start, startMulti;
     Font font;
     Font fontBig;
     int time = 0;
@@ -44,6 +44,15 @@ public class main extends JPanel implements ActionListener {
         start.setFocusPainted(false);
         start.setBorderPainted(false);
         start.addActionListener(this);
+        startMulti = new JButton("Start MultiPlayer");
+        startMulti.setBounds(300, 375, 200, 50); // x y size
+        startMulti.setFont(font);
+        startMulti.setBackground(Color.BLACK);
+        startMulti.setOpaque(false);
+        startMulti.setForeground(Color.RED);
+        startMulti.setFocusPainted(false);
+        startMulti.setBorderPainted(false);
+        startMulti.addActionListener(this);
         title = new JLabel();
         title.setBounds(130, 0, 1000, 100);
         title.setText("Hijack High Jinks");
@@ -53,6 +62,7 @@ public class main extends JPanel implements ActionListener {
         en.targetPosY = 300;
         en.target = false;
         add(start);
+        add(startMulti);
         add(title);
         w.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -84,6 +94,13 @@ public class main extends JPanel implements ActionListener {
             w.setVisible(false); //what...
             t.stop();
         }
+        if (e.getSource() == startMulti) {
+            new VSMode(this);
+            System.out.println("New Multi");
+            w.setVisible(false); //what...
+            t.stop();
+        }
+
         
         en.move();
         if (en.particleCounter <= 100) {

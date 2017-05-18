@@ -34,6 +34,14 @@ public class bullet {
             yRot = -Math.cos(Math.toRadians(p.rotation));
             xRot = Math.sin(Math.toRadians(p.rotation));
         }
+        public bullet(multiplayer p, double speed) {
+            this.speed = speed;
+            xPos = 10 + p.xPos + (15 * (Math.sin(Math.toRadians(p.rotation))));
+            yPos = 10 + p.yPos + (15 * (-Math.cos(Math.toRadians(p.rotation))));
+
+            yRot = -Math.cos(Math.toRadians(p.rotation));
+            xRot = Math.sin(Math.toRadians(p.rotation));
+        }
         public bullet(enemy p, double speed) {
             this.speed = speed;
             xPos = 10 + p.xPos + (15 * (Math.sin(Math.toRadians(p.rotation))));
