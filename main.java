@@ -95,7 +95,7 @@ public class main extends JPanel implements ActionListener {
             t.stop();
         }
         if (e.getSource() == startMulti) {
-            new VSMode(this);
+            new MultiPlayerPanel(this);
             System.out.println("New Multi");
             w.setVisible(false); //what...
             t.stop();

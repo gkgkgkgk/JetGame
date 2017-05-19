@@ -31,7 +31,7 @@ public class multiplayer {
         boolean forward = false;
         boolean right = false;
         boolean left = false;
-        char forwardChar, leftChar, rightChar, boostChar, fireChar;
+        public char forwardChar, leftChar, rightChar, boostChar, fireChar;
         
         
         double gravity = 9.87;
@@ -51,20 +51,28 @@ public class multiplayer {
     	ArrayList < bullet > bullets = new ArrayList < bullet > ();
     	ArrayList < particleTrail > trail = new ArrayList < particleTrail > ();
         
+		double shotCooldown = 0.25;
+		final double shotCooldownStore = 0.25;
         
         SoundEffect pew = SoundEffect.HIT;
 
+		int playerNum = 0;
+		Color c;
         
-        public multiplayer(char f, char l, char r, char b, char fire) {
+        public multiplayer(int num, Color c, char f, char l, char r, char b, char fire, int xPos) {
+			this.xPos = xPos;
+			playerNum = num;
+			this.c = c;
 			forwardChar = f;
 			leftChar = l;
 			rightChar = r;
 			boostChar = b;
-			fireChar = f;
+			fireChar = fire;
 
         }
 
 		public void move(){
+			shotCooldown -= 0.016;
 			if (particleCounter <= 50) {
                 particleCounter += 1;
                 trail.add(new particleTrail(this));
@@ -151,12 +159,13 @@ public class multiplayer {
 		}
 
 
-        public void checkCollision(ArrayList<bullet> bullets){
+        public void checkCollision(ArrayList<bullet> bullets, int enemyNum){
             for(int i = 0; i < bullets.size(); i++){
             bullet b = bullets.get(i);
             Rectangle r2 = b.bounds;
             bounds = new Rectangle((int)xPos, (int)yPos,30,30);
              if (r2.intersects(bounds) || bounds.intersects(r2)) {
+				System.out.println("Hit on Player" + playerNum +" by player" + enemyNum);
                 health -= 10;
                 bullets.remove(b);
                 lastHitTime = 1.0;
@@ -235,11 +244,14 @@ public class multiplayer {
 
 
     public void shoot() {
+		if(shotCooldown <= 0.0){
         bullet b = new bullet(this, 50);
         bullets.add(b);
         pew.play(false);
+		shotCooldown = shotCooldownStore;
+		}
     }
 	
-	
+
 
     }
