@@ -15,11 +15,11 @@ public class PlayerPanel extends JPanel{
 	char controlBoost = 'a';
 	char controlF = 'a';
 
-			Character[] lettersF = new Character[] {'w', 'i', 't', '8'};
-			Character[] lettersL = new Character[] {'a', 'j', 'f', '4'};
-			Character[] lettersR = new Character[] {'d', 'l', 'h','6'};
-			Character[] lettersShoot = new Character[] {'q', 'o', 'y','7'};
-			Character[] lettersBoost = new Character[] {'s', 'k', 'g','5'};
+			Character[] lettersF = new Character[] {'w', 'i', 't', '8', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+			Character[] lettersL = new Character[] {'a', 'j', 'f', '4', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+			Character[] lettersR = new Character[] {'d', 'l', 'h','6', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+			Character[] lettersShoot = new Character[] {'q', 'o', 'y','7', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+			Character[] lettersBoost = new Character[] {'s', 'k', 'g','5', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 
 	JComboBox<Character> controlsF = new JComboBox<Character>(lettersF);
 	JComboBox<Character> controlsL = new JComboBox<Character>(lettersL);
