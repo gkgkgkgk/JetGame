@@ -57,6 +57,7 @@ public class PlayerPanel extends JPanel{
 		controlsR.setSelectedItem(conR);
 		controlsShoot.setSelectedItem(conShoot);
 		controlsBoost.setSelectedItem(conBoost);
+
 		
 	}
 

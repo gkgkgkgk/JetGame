@@ -32,14 +32,16 @@ public class VSMode extends JPanel implements KeyListener{
 	Timer t = new Timer();
 	int refreshRate = 16;
 	
-	
-	
-	
+	ArrayList < cloud > clouds = new ArrayList < cloud > ();
+
+	double cloudAmount;
+	Font font, fontBig, fontBiggest;
+    
 	JFrame w;
 	public static VSMode j;
 	
 	public VSMode(main m, ArrayList<multiplayer> p){
-		System.out.println("Size:" + p.size());
+		cloudAmount = Math.random()*125; //random amount of clouds
 		players = p;
 		main = m;
 		w = new JFrame();
@@ -61,11 +63,38 @@ public class VSMode extends JPanel implements KeyListener{
 	}	
 	
 	
-	
+	public void getFonts() {
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("fonts/mainFont.ttf"))).deriveFont(Font.PLAIN, 24);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+         try {
+            fontBig = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("fonts/mainFont.ttf"))).deriveFont(Font.PLAIN, 48);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        try {
+            fontBiggest = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(new File("fonts/mainFont.ttf"))).deriveFont(Font.PLAIN, 72);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 	
 	public void loop(){
 		t.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
+				 if(clouds.size() < cloudAmount){
+    	clouds.add(new cloud(10+Math.random()*90, (int)(4*Math.random())));
+    }
+    else{
+    	for(int i = 0; i < clouds.size(); i++){
+    		clouds.get(i).move();
+    		if(clouds.get(i).xPos > 1300){
+    			clouds.remove(clouds.get(i));
+    		}
+    	}
+    }
 				for(multiplayer p : players){
 					p.move();
 					for(multiplayer pb : players){
@@ -122,12 +151,24 @@ public class VSMode extends JPanel implements KeyListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform old = g2d.getTransform();	
-	    
-		for(multiplayer p: players){ // draw markers
+		AffineTransform old = g2d.getTransform();
+for(multiplayer p: players){ // draw markers
 			g.setColor(p.c);
 			g.fillOval((int)p.xPos-15, (int)p.yPos-15, 60,60);
-		}
+		}		
+	     Composite c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+            0.1f);
+		for(int i = 0; i < clouds.size(); i ++){
+        	if(clouds.get(i).size < 90){
+			c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / (100/clouds.get(i).size)));
+            g2d.setComposite(c);
+        	g2d.drawImage(clouds.get(i).image, (int)clouds.get(i).xPos, (int)clouds.get(i).yPos, (int)clouds.get(i).size, (int)clouds.get(i).size,j);
+			}
+        }
+		c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+            1f);
+			g2d.setComposite(c);
+		
 		
 		for(multiplayer p : players){
 			for (int i = 0; i < p.trail.size(); i++) {
@@ -149,6 +190,12 @@ public class VSMode extends JPanel implements KeyListener{
             }
 		}
 		
+		for(int i = 0; i < clouds.size(); i ++){
+			if(clouds.get(i).size >= 90){
+        	c = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)(1f / (100/clouds.get(i).size)));
+            g2d.setComposite(c);
+        	g2d.drawImage(clouds.get(i).image, (int)clouds.get(i).xPos, (int)clouds.get(i).yPos, (int)clouds.get(i).size, (int)clouds.get(i).size,j);
+        }}
 
 	}
 	
