@@ -1,7 +1,14 @@
 # JetGame
-## Playing with Physics for a flying game.
+## I Started Playing with Physics for a flying game.
 ---
-### I will be uploading a gif every 20th commit.
+
+### Basic chart of how it works:
+
+![alt text](images/Diagram.png "Diagram")
+
+
+
+### GIF Every 20 Updates:
 
 Commit #1
 
