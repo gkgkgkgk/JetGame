@@ -57,7 +57,7 @@ public class MultiPlayerPanel extends JPanel implements ActionListener{
 			Character[] lettersR = new Character[] {'d', 'l', 'h','6', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 			Character[] lettersShoot = new Character[] {'q', 'o', 'y','7', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 			Character[] lettersBoost = new Character[] {'s', 'k', 'g','5', 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
-			Color[] colors = new Color[]{Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.PINK, Color.GRAY, Color.BLACK, Color.YELLOW, Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.PINK, Color.GRAY, Color.BLACK, Color.YELLOW}; // now you can add 16 players, cuz that is useful i guess.
+			Color[] colors = new Color[]{Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.PINK, Color.GRAY, Color.BLACK, Color.YELLOW, Color.BLUE, Color.RED, Color.GREEN, Color.ORANGE, Color.PINK, Color.GRAY, Color.BLACK, Color.YELLOW}; // now you can ass 16 players, cuz that is useful i guess.
 			PlayerPanel p = new PlayerPanel(playerAmount, colors[playerAmount-1], lettersF[playerAmount-1], lettersL[playerAmount-1], lettersR[playerAmount-1], lettersShoot[playerAmount-1], lettersBoost[playerAmount-1]);
 			add(p);
 			playerPanels.add(p);

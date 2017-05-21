@@ -35,6 +35,7 @@ public class bullet {
             xRot = Math.sin(Math.toRadians(p.rotation));
         }
         public bullet(multiplayer p, double speed) {
+        	bounds = new Rectangle((int)xPos-5, (int)yPos-5, 10,10);
             this.speed = speed;
             xPos = 10 + p.xPos + (15 * (Math.sin(Math.toRadians(p.rotation))));
             yPos = 10 + p.yPos + (15 * (-Math.cos(Math.toRadians(p.rotation))));

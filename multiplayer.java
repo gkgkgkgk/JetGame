@@ -13,8 +13,8 @@ import java.lang.Math;
 import java.awt.geom.AffineTransform;
 
 public class multiplayer {
-		double maxHealth = 200;
-		double health = 200;
+		double maxHealth = 100;
+		double health = 100;
         double xPos;
         double yPos;
         double width = 30.0;
@@ -23,7 +23,7 @@ public class multiplayer {
         Image img = new ImageIcon(this.getClass().getResource("images/plane-1.png")).getImage();
         Rectangle bounds = new Rectangle(30,30, (int)xPos, (int)yPos);        
         //regenrate health var
-        double lastHitTime = 1.0;
+        double lastHitTime = 3.0;
         double elapsedTime = 0.016;
 	    int particleCounter = 0;
 
@@ -166,18 +166,29 @@ public class multiplayer {
             bounds = new Rectangle((int)xPos, (int)yPos,30,30);
              if (r2.intersects(bounds) || bounds.intersects(r2)) {
 				System.out.println("Hit on Player" + playerNum +" by player" + enemyNum);
-                health -= 10;
+                health -= 25;
                 bullets.remove(b);
                 lastHitTime = 1.0;
             }
         }
 	}  
+	public void checkCollision(multiplayer p, int enemyNum){
+			Rectangle r2 = p.bounds;
+			 if (r2.intersects(bounds) && p.boost) {
+                health -= 50; // usually does damage twice...
+                p.health -= 25;
+             }
+		}
+	
+
+
 
 	public void regenerateHealth(){
 		//System.out.println(health);
-		lastHitTime -= 0.02;
+		lastHitTime -= 0.016;
 		if(lastHitTime <= 0 && health <= maxHealth){
 			health += 0.05;
+			lastHitTime = 3.0;
 		}
 	}
 	

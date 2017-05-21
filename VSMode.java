@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.Graphics;
 import java.util.*;
 import java.awt.Color;
 import java.awt.*;
@@ -27,7 +26,8 @@ public class VSMode extends JPanel implements KeyListener{
 	
 	ArrayList<multiplayer> players = new ArrayList<multiplayer>();
 	
-	
+	ArrayList<explosion> explosions = new ArrayList<explosion>();
+
 	Color bgColor = new Color(108,164,200);
 	Timer t = new Timer();
 	int refreshRate = 16;
@@ -36,6 +36,8 @@ public class VSMode extends JPanel implements KeyListener{
 
 	double cloudAmount;
 	Font font, fontBig, fontBiggest;
+    
+    double elapsedTime = 0.016;
     
 	JFrame w;
 	public static VSMode j;
@@ -95,12 +97,47 @@ public class VSMode extends JPanel implements KeyListener{
     		}
     	}
     }
-				for(multiplayer p : players){
+    for (int i = 0; i < explosions.size(); i++) {
+            explosion ex = explosions.get(i);
+            if (ex.particles.size() != 0) {
+                for (int z = 0; z < ex.particles.size(); z++) {
+                    explosionParticle ep = ex.particles.get(z);
+                    if (ep.lifeTime >= 0) {
+                        ep.posX += ep.speed * Math.sin(Math.toRadians(ep.rotation));
+                        ep.posY -= ep.speed * Math.cos(Math.toRadians(ep.rotation));
+                        ep.lifeTime -= elapsedTime;
+                        if (ep.trailBool) {
+                            if (ep.particleCounter <= 5) {
+                                ep.particleCounter += 1;
+                                ep.trail.add(new particleTrail(ep));
+                            } else {
+                                ep.trail.remove(0);
+                                ep.particleCounter -= 1;
+                            }
+                        }
+                    } else {
+                        ex.particles.remove(ep);
+                    }
+                }
+            } else {
+                explosions.remove(ex);
+            }
+
+        }
+
+				for(int i = 0; i < players.size(); i++){
+					multiplayer p = players.get(i);
 					p.move();
+					
 					for(multiplayer pb : players){
 						if(pb != p){
 							p.checkCollision(pb.bullets, pb.playerNum);
+							p.checkCollision(pb, pb.playerNum);
 						}
+					}
+					if(p.health <= 0){
+						explosions.add(new explosion(100,(int)p.xPos,(int)p.yPos));
+						players.remove(p);
 					}
 				}
 
@@ -186,6 +223,11 @@ for(multiplayer p: players){ // draw markers
             for (int i = 0; i < p.bullets.size(); i++) {
                 bullet b = p.bullets.get(i);
                 g2d.setTransform(old);
+                for (int x = 0; x < b.trail.size(); x++) {
+                particleTrail part = b.trail.get(x);   
+	            g2d.setColor(Color.WHITE);
+                g.fillRect((int)part.xPos,(int)part.yPos,part.size, part.size);
+            }
                 g2d.drawImage(b.img, (int) b.xPos, (int) b.yPos, 5, 5, j);
             }
 		}
@@ -196,8 +238,26 @@ for(multiplayer p: players){ // draw markers
             g2d.setComposite(c);
         	g2d.drawImage(clouds.get(i).image, (int)clouds.get(i).xPos, (int)clouds.get(i).yPos, (int)clouds.get(i).size, (int)clouds.get(i).size,j);
         }}
+        ArrayList<explosionParticle> combinedEParticles = new ArrayList<explosionParticle>();
+        ArrayList<particleTrail> combinedParticles = new ArrayList<particleTrail>();
+
+        for (int o = 0; o < explosions.size(); o++) {
+            explosion ex = explosions.get(o);
+            combinedEParticles.addAll(ex.particles);         
+        }
+        for (int z = 0; z < combinedEParticles.size(); z++) {
+                explosionParticle ep = combinedEParticles.get(z);
+                g2d.drawImage(ep.img, (int) ep.posX, (int) ep.posY, 5, 5, j);
+                combinedParticles.addAll(ep.trail);
+        }
+        for (int n = 0; n < combinedParticles.size(); n++) {
+                particleTrail part = combinedParticles.get(n);
+
+                g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
+            }
 
 	}
+	
 	
 	
 } 
