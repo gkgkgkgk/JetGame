@@ -2,6 +2,8 @@
 ## I Started Playing with Physics for a flying game.
 ---
 
+[![Download JAR here!](https://github.com/gkgkgkgk/JetGame/blob/master/main.jar?raw=true)](https://github.com/gkgkgkgk/JetGame/blob/master/main.jar?raw=true)
+
 ### Basic chart of how it works:
 
 ![alt text](images/Diagram.png "Diagram")
