@@ -60,6 +60,22 @@ public class multiplayer {
 		int playerNum = 0;
 		Color c;
         
+        public multiplayer(multiplayer other) {
+          xPos = other.xPos;
+          playerNum = other.playerNum;
+          c = other.c;
+          forwardChar = other.forwardChar;	
+          leftChar = other.leftChar;
+		  rightChar = other.rightChar;
+		  boostChar = other.boostChar;
+		  fireChar = other.fireChar;
+			 maxHealth = 100;
+			 health = 100;
+        	 yPos = 0;
+        	 width = 30.0;
+        	 height = 30.0;        
+        	}
+        
         public multiplayer(int num, Color c, char f, char l, char r, char b, char fire, int xPos) {
 			this.xPos = xPos;
 			playerNum = num;
@@ -263,6 +279,13 @@ public class multiplayer {
         pew.play(false);
 		shotCooldown = shotCooldownStore;
 		}
+    }
+    
+    
+    public String toString()
+    {
+    return ""+xPos;	
+    	
     }
 	
 

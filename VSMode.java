@@ -28,8 +28,7 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	JButton restart = new JButton("New Round");
 	
 	ArrayList<multiplayer> players = new ArrayList<multiplayer>();
-	ArrayList<multiplayer> playersStorage = new ArrayList<multiplayer>();
-
+	ArrayList<multiplayer> storage = new ArrayList<multiplayer>();
 	ArrayList<explosion> explosions = new ArrayList<explosion>();
 
 	Color bgColor = new Color(108,164,200);
@@ -46,11 +45,13 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	JFrame w;
 	public static VSMode j;
 	
-	public VSMode(main m, ArrayList<multiplayer> p){
+	public VSMode(main m, ArrayList<multiplayer> pl){
+			//storage.add(new multiplayer(2, Color.WHITE, 'a', 's', 'd', 'q', 'e', 50));
+
 		restart.setFocusable(false);
 		cloudAmount = Math.random()*125; //random amount of clouds
-		players = p;
-		playersStorage = p;
+		setArrays(pl,players);
+		setStorage(pl);
 		main = m;
 		w = new JFrame();
 		w.setSize(1280, 720);
@@ -64,10 +65,23 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
         restart.addActionListener(this);
         add(restart);
 		loop();
-
-		
+		System.out.println("boi");
 	}	
 	
+	
+	public void setArrays(ArrayList<multiplayer> x,ArrayList<multiplayer> y ){
+		for(multiplayer a : x){
+			players.add(new multiplayer(a));	
+		}
+		
+	}
+	
+	public void setStorage(ArrayList<multiplayer> x)
+	{
+		for(multiplayer a : x){
+			storage.add(new multiplayer(a));	
+		}
+	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == restart){
@@ -97,6 +111,12 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	public void loop(){
 		t.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
+			
+				System.out.println("Storage "+ storage.get(0));
+			
+			
+				
+				
 				 if(clouds.size() < cloudAmount){
     	clouds.add(new cloud(10+Math.random()*90, (int)(4*Math.random())));
     }
@@ -275,7 +295,8 @@ for(multiplayer p: players){ // draw markers
 	
 	public void restartGame(){
 		cloudAmount = Math.random()*125; //random amount of clouds
-		players = playersStorage;
+		players.clear();
+		setArrays(storage,players);
 		}
 	
 } 
