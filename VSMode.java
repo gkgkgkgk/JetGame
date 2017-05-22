@@ -18,14 +18,18 @@ import java.io.InputStream;
 
 
 
-public class VSMode extends JPanel implements KeyListener{
+public class VSMode extends JPanel implements KeyListener, ActionListener{
 	
 	
 	main main;
 	
+	boolean isGameOver = false;
+	
+	JButton restart = new JButton("New Round");
 	
 	ArrayList<multiplayer> players = new ArrayList<multiplayer>();
-	
+	ArrayList<multiplayer> playersStorage = new ArrayList<multiplayer>();
+
 	ArrayList<explosion> explosions = new ArrayList<explosion>();
 
 	Color bgColor = new Color(108,164,200);
@@ -43,8 +47,10 @@ public class VSMode extends JPanel implements KeyListener{
 	public static VSMode j;
 	
 	public VSMode(main m, ArrayList<multiplayer> p){
+		restart.setFocusable(false);
 		cloudAmount = Math.random()*125; //random amount of clouds
 		players = p;
+		playersStorage = p;
 		main = m;
 		w = new JFrame();
 		w.setSize(1280, 720);
@@ -54,16 +60,21 @@ public class VSMode extends JPanel implements KeyListener{
         setLayout(null);
         w.setVisible(true);
         setBackground(bgColor);
-        
+        restart.setBounds(590, 20,100,50);
+        restart.addActionListener(this);
+        add(restart);
 		loop();
-		for(multiplayer pl : players){
-			
-			System.out.println("fire" + pl.fireChar);
-			
-		}
+
 		
 	}	
 	
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == restart){
+			restartGame();	
+		}
+	}
+
 	
 	public void getFonts() {
         try {
@@ -140,7 +151,11 @@ public class VSMode extends JPanel implements KeyListener{
 						players.remove(p);
 					}
 				}
-
+			if(players.size() == 1){
+				isGameOver = true;
+				players.get(0).setWins(1);
+				System.out.println("Player " + players.get(0).playerNum + "is the winner");
+			}
 				repaint();
 				}	
 		}, 0, refreshRate);}
@@ -258,6 +273,9 @@ for(multiplayer p: players){ // draw markers
 
 	}
 	
-	
+	public void restartGame(){
+		cloudAmount = Math.random()*125; //random amount of clouds
+		players = playersStorage;
+		}
 	
 } 

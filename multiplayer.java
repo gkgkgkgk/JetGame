@@ -33,6 +33,7 @@ public class multiplayer {
         boolean left = false;
         public char forwardChar, leftChar, rightChar, boostChar, fireChar;
         
+        int amountOfWins = 0;
         
         double gravity = 9.87;
     	double maxVelocity = 160.0;
@@ -253,6 +254,7 @@ public class multiplayer {
         accelerationX = (forceX / mass);
     }
 
+	public void setWins(int num){amountOfWins += num;}
 
     public void shoot() {
 		if(shotCooldown <= 0.0){
