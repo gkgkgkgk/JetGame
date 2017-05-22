@@ -183,16 +183,16 @@ public class multiplayer {
             bounds = new Rectangle((int)xPos, (int)yPos,30,30);
              if (r2.intersects(bounds) || bounds.intersects(r2)) {
 				System.out.println("Hit on Player" + playerNum +" by player" + enemyNum);
-                health -= 25;
+                health -= 34;
                 bullets.remove(b);
-                lastHitTime = 1.0;
+                lastHitTime = 5.0;
             }
         }
 	}  
 	public void checkCollision(multiplayer p, int enemyNum){
 			Rectangle r2 = p.bounds;
 			 if (r2.intersects(bounds) && p.boost) {
-                health -= 50; // usually does damage twice...
+                health -= 50;
                 p.health -= 25;
              }
 		}
@@ -205,7 +205,6 @@ public class multiplayer {
 		lastHitTime -= 0.016;
 		if(lastHitTime <= 0 && health <= maxHealth){
 			health += 0.05;
-			lastHitTime = 3.0;
 		}
 	}
 	
