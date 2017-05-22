@@ -23,13 +23,18 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	
 	main main;
 	
+	LeaderBoard lb;
+	
 	boolean isGameOver = false;
+	boolean drawBoard = false;
 	
 	JButton restart = new JButton("New Round");
 	
 	ArrayList<multiplayer> players = new ArrayList<multiplayer>();
 	ArrayList<multiplayer> storage = new ArrayList<multiplayer>();
 	ArrayList<explosion> explosions = new ArrayList<explosion>();
+
+	int[] points;
 
 	Color bgColor = new Color(108,164,200);
 	Timer t = new Timer();
@@ -47,11 +52,14 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	
 	public VSMode(main m, ArrayList<multiplayer> pl){
 			//storage.add(new multiplayer(2, Color.WHITE, 'a', 's', 'd', 'q', 'e', 50));
-
+		points = new int[pl.size()];
 		restart.setFocusable(false);
 		cloudAmount = Math.random()*125; //random amount of clouds
 		setArrays(pl,players);
 		setStorage(pl);
+		for(int i = 0; i < players.size(); i++){
+			points[i] = 0;	
+		}
 		main = m;
 		w = new JFrame();
 		w.setSize(1280, 720);
@@ -66,6 +74,7 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
         add(restart);
 		loop();
 		System.out.println("boi");
+		lb = new LeaderBoard(storage, points);
 	}	
 	
 	
@@ -85,7 +94,9 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == restart){
-			restartGame();	
+			restartGame();
+			isGameOver = false;
+
 		}
 	}
 
@@ -168,14 +179,20 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 					}
 					if(p.health <= 0){
 						explosions.add(new explosion(100,(int)p.xPos,(int)p.yPos));
+						p.explode.play(false);
 						players.remove(p);
 					}
 				}
 			if(players.size() == 1){
-				isGameOver = true;
-				players.get(0).setWins(1);
+				if(!isGameOver){
+					isGameOver = true;
+					players.get(0).setWins(1);
+					points[players.get(0).playerNum - 1] += 1;
+					lb.setPoints(points);
+				}
 				System.out.println("Player " + players.get(0).playerNum + "is the winner");
 			}
+			
 				repaint();
 				}	
 		}, 0, refreshRate);}
@@ -199,7 +216,10 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 					p.shoot();
 				}
 			 }
-        
+        	if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+    		{
+    			drawBoard = true;
+    		}
     }
     public void keyReleased(KeyEvent e) {
     	for(multiplayer p : players){
@@ -217,6 +237,10 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 				 }
 				 
 			 }
+			 if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+    		{
+    			drawBoard = false;
+    		}
     }
     public void keyTyped(KeyEvent e) {}
 
@@ -290,7 +314,10 @@ for(multiplayer p: players){ // draw markers
 
                 g2d.drawImage(part.img, (int) part.xPos, (int) part.yPos, part.size, part.size, j);
             }
-
+           g.setColor(Color.BLACK);
+           if(drawBoard){
+           lb.Draw(g);
+           }
 	}
 	
 	public void restartGame(){

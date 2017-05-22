@@ -56,6 +56,7 @@ public class multiplayer {
 		final double shotCooldownStore = 0.25;
         
         SoundEffect pew = SoundEffect.HIT;
+        SoundEffect explode = SoundEffect.EXPLODE;
 
 		int playerNum = 0;
 		Color c;
