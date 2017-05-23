@@ -33,7 +33,7 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 	ArrayList<multiplayer> players = new ArrayList<multiplayer>();
 	ArrayList<multiplayer> storage = new ArrayList<multiplayer>();
 	ArrayList<explosion> explosions = new ArrayList<explosion>();
-
+	ArrayList<ArmyMan> men = new ArrayList<ArmyMan>();
 	int[] points;
 
 	Color bgColor = new Color(108,164,200);
@@ -124,9 +124,12 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 			public void run() {
 			
 				System.out.println("Storage "+ storage.get(0));
-			
-			
-				
+			for(int i = 0; i < men.size(); i++){ //armyMen
+				men.get(i).move();
+				if(men.get(i).yPos >= 750){
+					men.remove(men.get(i));
+				}	
+			}
 				
 				 if(clouds.size() < cloudAmount){
     	clouds.add(new cloud(10+Math.random()*90, (int)(4*Math.random())));
@@ -180,7 +183,9 @@ public class VSMode extends JPanel implements KeyListener, ActionListener{
 					if(p.health <= 0){
 						explosions.add(new explosion(100,(int)p.xPos,(int)p.yPos));
 						p.explode.play(false);
+						men.add(new ArmyMan((int)p.xPos, (int)p.yPos));
 						players.remove(p);
+						//add army man
 					}
 				}
 			if(players.size() == 1){
@@ -318,6 +323,10 @@ for(multiplayer p: players){ // draw markers
            if(drawBoard){
            lb.Draw(g);
            }
+           for(ArmyMan m : men){
+           		m.Draw(g, this);
+           	
+           	}
 	}
 	
 	public void restartGame(){
